@@ -1,0 +1,13 @@
+h1
+{
+    height: 100px;
+    width: 1000px;
+    align-items: center;
+background-color:rgb(119, 202, 202);
+padding-left: 500px;
+}
+.A{
+    height: 1000px;
+    width: 1500px;
+    background-color: rgb(146, 213, 213);
+}
