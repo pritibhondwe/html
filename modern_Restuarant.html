@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern Restaurant</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+    }
+    .hero {
+      background: url('assets/images/hero.jpg') no-repeat center center/cover;
+      color: white;
+      padding: 100px 20px;
+      text-align: center;
+    }
+    .btn {
+      background-color: #ff6347;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    section {
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .menu-items {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .item img {
+      width: 200px;
+      height: auto;
+      border-radius: 10px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    input, textarea {
+      padding: 10px;
+      width: 300px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #ff6347;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <h1>Welcome to Modern Taste</h1>
+    <p>Experience fine dining with us</p>
+    <a href="#menu" class="btn">Explore Menu</a>
+  </header>
+
+  <section id="about">
+    <h2>About Us</h2>
+    <p>We serve delicious food with a modern twist. Enjoy great ambience and premium hospitality.</p>
+  </section>
+
+  <section id="menu">
+    <h2>Our Menu</h2>
+    <div class="menu-items">
+      <div class="item">
+        <img src="assets/images/dish1.jpg" alt="Dish 1">
+        <h3>Grilled Chicken</h3>
+      </div>
+      <div class="item">
+        <img src="assets/images/dish2.jpg" alt="Dish 2">
+        <h3>Veggie Delight</h3>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <form>
+      <input type="text" placeholder="Your Name" required />
+      <input type="email" placeholder="Your Email" required />
+      <textarea placeholder="Your Message"></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  <script>
+    document.querySelector("form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert("Thank you for contacting us!");
+    });
+  </script>
+</body>
+</html>
