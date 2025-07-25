@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin:0px;
+            padding:0px;
+        }
+    .parent
+    {
+        height:400px;
+        width:400px;
+        background-color: yellow;
+        border-radius: 90px;
+        position: fixed;
+        background: radial-gradient(circle at 30% 107%,  yellow 0%, orange 25%, rgb(214, 41, 118) 50%, rgb(150, 47, 191) 75%, rgb(78, 90, 212) 100%);
+        margin-left: 500px;
+        margin-top: 125px;
+    }
+    .child{
+        height:250px;
+        width: 250px;
+        background-color: white;
+        border-radius: 90px;
+        border-style:  10px solid ;
+        margin-left:60px;
+        margin-top:50px;
+        position: fixed;
+        background-color:	hsl(20, 23%, 95%,0.1);
+        border: 20px solid #fff;
+        
+          
+    }
+    .circle
+    {
+        height:80px;
+        width:80px;
+        border-radius:50%;
+        background-color: blue;
+        margin-left:70px;
+        margin-top:15px;
+        border: 20px solid #fff;
+        background-color:	hsl(20, 23%, 95%,0.1);
+        position: fixed;
+       
+
+        
+    }
+    .dot{
+        height: 30px;
+        width: 30px;
+        background-color: white;
+        border-radius:50%;
+        margin-left: 180px;
+        margin-top: 30px;
+    }
+</style>
+</head>
+<body>
+    <div class="parent">
+        <div class="child">
+            <div class="dot"> </div>
+            <div class="circle">
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
