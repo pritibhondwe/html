@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Palindrome Checker</title>
+</head>
+<body>
+    <h2>Simple Palindrome Checker</h2>
+    <button onclick="checkPalindrome()">Check</button>
+    <p id="output"></p>
+
+    <script>
+        function checkPalindrome() {
+            var str = prompt("Enter a string:");
+
+            //if (!str) {
+              //  document.getElementById("output").innerText = "Please enter a string.";
+               // return;
+          //  }
+
+            var reversed = str.split("").reverse().join("");
+
+            if (str === reversed) {
+                document.getElementById("output").innerText = str + " is a palindrome.";
+            } else {
+                document.getElementById("output").innerText = str + " is NOT a palindrome.";
+            }
+        }
+    </script>
+</body>
+</html>
