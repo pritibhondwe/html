@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Store Clone</title>
+    <link rel="stylesheet" href="./fontawesome-free-6.7.2-web/fontawesome-free-6.7.2-web/css/all.min.css">    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: white;
+        }
+
+        .parent {
+            height: 2000px;
+            background-color: white;
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        nav {
+            height: 60px;
+            width: 100%;
+            background-color: rgb(243, 246, 248);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav i {
+            font-size: 20px;
+            margin-right: 30px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 20px;
+        }
+
+        li {
+            font-size: 16px;
+            color: black;
+            cursor: pointer;
+        }
+
+        li:hover {
+            color: gray;
+        }
+
+        .banner {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .products {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .product {
+            width: 120px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .product img {
+            width: 100%;
+            max-width: 80px;
+        }
+
+        .product p {
+            margin-top: 10px;
+            font-size: 14px;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="parent">
+        <nav>
+            <i class="fa-brands fa-apple"></i>
+            <ul>
+                <li>Store</li>
+                <li>Mac</li>
+                <li>iPad</li>
+                <li>iPhone</li>
+                <li>Watch</li>
+                <li>AirPods</li>
+                <li>TV & Home</li>
+                <li>Entertainment</li>
+                <li>Accessories</li>
+                <li>Support</li>
+            </ul>
+        </nav>
+
+        <div class="banner">
+            Store. The best way to buy the products you love.
+        </div>
+
+        <div class="products">
+            <div class="product">
+                <img src="mac.jpeg" alt="Mac">
+                <p>Mac</p>
+            </div>
+            <div class="product">
+                <img src="iphone.jpeg" alt="iPhone">
+                <p>iPhone</p>
+            </div>
+            <div class="product">
+                <img src="ipad.jpeg" alt="iPad">
+                <p>iPad</p>
+            </div>
+            <div class="product">
+                <img src="Applewatch.jpeg" alt="Apple Watch">
+                <p>Apple Watch</p>
+            </div>
+            <div class="product">
+                <img src="AirPods.jpeg" alt="AirPods">
+                <p>AirPods</p>
+            </div>
+            <div class="product">
+                <img src="AirTag.jpeg" alt="AirTag">
+                <p>AirTag</p>
+            </div>
+            <div class="product">
+                <img src="AppleTv.jpeg" alt="Apple TV">
+                <p>Apple TV 4K</p>
+            </div>
+            <div class="product">
+                <img src="HomePod mini.jpeg" alt="HomePod">
+                <p>HomePod</p>
+            </div>
+            <div class="product">
+                <img src="Accessories.jpeg" alt="Accessories">
+                <p>Accessories</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
