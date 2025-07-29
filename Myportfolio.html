@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS Professional Portfolio</title>
+    <style>
+        :root {
+            --primary: #0f2027;      /* Navy blue */
+            --accent: #acd2d4;       /* Neon blue */
+            --accent2: #d29fd3;      /* Neon pink */
+            --accent3: #cec286;      /* Neon yellow */
+            --background: #0f2027;   /* Navy blue/black */
+            --card: #181f2a;         /* Slightly lighter navy */
+            --text: #fff;
+            --muted: #8f99b2;
+            --glow: 0 0 16px 4px #d0dedf, 0 0 32px 8px #d1b5d1, 0 0 8px 2px #c5ba84;
+        }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+        header {
+            background: linear-gradient(90deg, #0f2027 0%, #1a2980 100%);
+            color: #fff;
+            padding: 36px 0 24px 0;
+            text-align: center;
+            box-shadow: var(--glow);
+            animation: headerGlow 2s infinite alternate;
+        }
+        @keyframes headerGlow {
+            0% { box-shadow: 0 0 16px 4px #92c4c7, 0 0 32px 8px #b991b9; }
+            100% { box-shadow: 0 0 32px 8px #bba3bb, 0 0 16px 4px #84a6a8; }
+        }
+        nav {
+            margin-top: 12px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: color 0.2s, text-shadow 0.2s, box-shadow 0.2s, outline 0.2s;
+            text-shadow: 0 0 8px #91bec0, 0 0 4px #ba8abb;
+            cursor: pointer;
+        }
+        nav a:hover, nav a:focus {
+            color: #f9d423;
+            text-shadow: 0 0 16px #cda8ce, 0 0 8px #9fc8ca;
+            outline: none;
+            box-shadow: 0 0 0 3px #90b6b899, 0 0 12px 4px #d59cd666;
+            border-radius: 6px;
+        }
+        section {
+            max-width: 900px;
+            margin: 48px auto;
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 0 32px 8px #fc00ff33, 0 0 16px 4px #00f2fe33;
+            padding: 48px 36px;
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            transition: opacity 0.8s cubic-bezier(.4,0,.2,1), transform 0.8s cubic-bezier(.4,0,.2,1);
+            animation: sectionGlow 2.5s infinite alternate;
+        }
+        section.visible {
+            opacity: 1;
+            transform: none;
+        }
+        @keyframes sectionGlow {
+            0% { box-shadow: 0 0 32px 8px #fc00ff33, 0 0 16px 4px #00f2fe33; }
+            100% { box-shadow: 0 0 48px 16px #00f2fe55, 0 0 24px 8px #fc00ff55; }
+        }
+        h2 {
+            color: #f3f1f3;
+            margin-top: 0;
+            font-size: 2rem;
+            text-shadow: 0 0 8px #97c1c4, 0 0 4px #c39bc4;
+            letter-spacing: 1px;
+        }
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(.4,0,.2,1), transform 0.8s cubic-bezier(.4,0,.2,1);
+            animation: divGlow 2s infinite alternate;
+        }
+        .skills.visible {
+            opacity: 1;
+            transform: none;
+            border-radius: 10px;
+        }
+        .skill {
+            background: linear-gradient(90deg, #0a0a0a 0%, #080808 100%);
+            color: #fff;
+            padding: 14px 26px;
+            border-radius: 22px;
+            font-size: 1rem;
+            border: 2px solid #f1f1ed;
+            font-weight: 700;
+            box-shadow: 0 0 16px 4px #00f2fe99, 0 0 8px 2px #fc00ff99;
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+            cursor: pointer;
+            animation: divGlow 2.5s infinite alternate;
+        }
+        .skill:hover {
+            background: linear-gradient(90deg, #f9d423 0%, #fc00ff 100%);
+            color: #222;
+            transform: scale(1.12) rotate(-2deg);
+            box-shadow: 0 0 32px 8px #140014, 0 0 16px 4px #0e0d0b;
+            border-radius: 10px;
+        }
+        @keyframes divGlow {
+            0% { box-shadow: 0 0 16px 4px #00f2fe99, 0 0 8px 2px #fc00ff99; }
+            100% { box-shadow: 0 0 32px 8px #0a0a0a, 0 0 16px 4px #0a0a09; }
+        }
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+        }
+        .project {
+            background: linear-gradient(120deg, #181f2a 60%, #00f2fe22 100%);
+            border-radius: 14px;
+            box-shadow: 0 0 24px 6px #fc00ff44, 0 0 12px 3px #00f2fe44;
+            padding: 22px 16px;
+            transition: box-shadow 0.3s, transform 0.3s, background 0.3s;
+            border-left: 4px solid #f9d423;
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            animation: divGlow 2.5s infinite alternate;
+        }
+        .project.visible {
+            opacity: 1;
+            transform: none;
+            transition: opacity 0.8s cubic-bezier(.4,0,.2,1), transform 0.8s cubic-bezier(.4,0,.2,1);
+        }
+        .project:hover {
+            box-shadow: 0 0 48px 16px #00f2fe, 0 0 24px 8px #fc00ff;
+            background: linear-gradient(120deg, #f9d423 0%, #fc00ff 100%);
+            color: #222;
+            transform: translateY(-4px) scale(1.04);
+        }
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            max-width: 420px;
+            animation: divGlow 2.5s infinite alternate;
+        }
+        .contact-form input, .contact-form textarea {
+            padding: 12px;
+            border: 2px solid #5a75af;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #232b3b;
+            color: #fff;
+            box-shadow: 0 0 8px 2px #f9d42344;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+        .contact-form input:focus, .contact-form textarea:focus {
+            border: 2px solid #00f2fe;
+            box-shadow: 0 0 16px 4px #00f2fe44;
+            outline: none;
+        }
+        .contact-form button {
+            background: linear-gradient(90deg, #57d5db 0%, #d622daf3 100%);
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 0 16px 4px #00f2fe99, 0 0 8px 2px #fc00ff99;
+        }
+        .contact-form button:hover {
+            background: linear-gradient(90deg, #fcdc3f 0%, #f616fa 100%);
+            color: #222;
+            box-shadow: 0 0 25px 8px #f622fa, 0 0 16px 4px #ffdc2e;
+        }
+        #formMsg {
+            color: #f7f4f7;
+            font-weight: 600;
+            margin-top: 10px;
+            text-shadow: 0 0 4px #00f2fe, 0 0 4px #fc00ff;
+        }
+
+        /* ----------------- MEDIA QUERY SECTION ----------------- */
+        @media (max-width: 600px) {
+            header {
+                padding: 20px 0 12px 0;
+            }
+            nav a {
+                margin: 0 8px;
+                font-size: 1rem;
+            }
+            section {
+                padding: 18px 4px;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .skills {
+                gap: 10px;
+            }
+            .projects {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+        }
+        /* ------------------------------------------------------- */
+    </style>
+</head>
+<body>
+    <header>
+        <h1>PRITI BHONDWE</h1>
+        <p>Computer Science Student | Web Developer | Tech Enthusiast</p>
+        <nav>
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+    <section id="about">
+        <h2>About Me</h2>
+        <p>Hello! I am a passionate Computer Science student with a keen interest in web development, programming, and learning new technologies. I have worked on various projects and always strive to acquire new skills and improve myself.</p>
+    </section>
+    <section id="skills">
+        <h2>Skills</h2>
+        <div class="skills">
+            <div class="skill">HTML5</div>
+            <div class="skill">CSS3</div>
+            <div class="skill">JavaScript</div>
+            <div class="skill">React</div>
+            <div class="skill">Java Fullstack</div>
+            <div class="skill">Python</div>
+            <div class="skill">C</div>
+            <div class="skill">C++</div>
+            <div class="skill">Git</div>
+            <div class="skill">SQL</div>
+            <div class="skill">AWS</div>
+        </div>
+    </section>
+    <section id="projects">
+        <h2>Projects</h2>
+        <div class="projects">
+            <div class="project">
+                <h3>Portfolio Website</h3>
+                <p>Developed a personal portfolio website using HTML, CSS, and JavaScript to showcase my skills and projects.</p>
+            </div>
+            <div class="project">
+                <h3>To-Do App</h3>
+                <p>Designed a simple To-Do application using React, allowing users to manage their daily tasks efficiently.</p>
+            </div>
+            <div class="project">
+                <h3>Weather App</h3>
+                <p>Created a weather application that fetches and displays real-time weather data using public APIs.</p>
+            </div>
+        </div>
+    </section>
+    <section id="contact">
+        <h2>Contact</h2>
+        <form class="contact-form" id="contactForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <textarea id="message" rows="4" placeholder="Your Message" required></textarea>
+            <button type="submit">Send</button>
+        </form>
+        <p id="formMsg"></p>
+    </section>
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        // Contact form handler
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('formMsg').textContent = 'Thank you! Your message has been received.';
+            this.reset();
+        });
+        // Section and element reveal animation
+        function revealOnScroll() {
+            const sections = document.querySelectorAll('section');
+            const skills = document.querySelector('.skills');
+            const projects = document.querySelectorAll('.project');
+            const windowHeight = window.innerHeight;
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                if (sectionTop < windowHeight - 80) {
+                    section.classList.add('visible');
+                }
+            });
+            if (skills && skills.getBoundingClientRect().top < windowHeight - 80) {
+                skills.classList.add('visible');
+            }
+            projects.forEach(project => {
+                if (project.getBoundingClientRect().top < windowHeight - 60) {
+                    project.classList.add('visible');
+                }
+            });
+        }
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+    </script>
+</body>
+</html>
