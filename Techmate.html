@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TechMate - Smart Gadget</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      color: #333;
+    }
+
+    nav {
+      background: #000;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+    }
+
+    nav .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+    }
+
+    header {
+      text-align: center;
+      padding: 80px 20px;
+      background: #0077b6;
+      color: white;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #00b894;
+      color: white;
+      padding: 10px 20px;
+      margin-top: 15px;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .feature {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 250px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .testimonial-slider {
+      max-width: 600px;
+      margin: auto;
+      font-style: italic;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #000;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .features {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      nav ul {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">TechMate</div>
+    <ul>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="#buy">Buy Now</a></li>
+    </ul>
+  </nav>
+
+  <header>
+    <h1>The Smartest Gadget of 2025</h1>
+    <p>Experience the power of AI in your palm with TechMate.</p>
+    <a href="#buy" class="btn">Pre-order Now</a>
+  </header>
+
+  <section id="features">
+    <h2>Why TechMate?</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>Smart AI Assistant</h3>
+        <p>Control your life with voice and gestures, hands-free.</p>
+      </div>
+      <div class="feature">
+        <h3>Long Battery Life</h3>
+        <p>Up to 72 hours on a single charge — truly unstoppable.</p>
+      </div>
+      <div class="feature">
+        <h3>Seamless Sync</h3>
+        <p>Connect with all your devices instantly.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials">
+    <h2>What People Say</h2>
+    <div class="testimonial-slider">
+      <p id="testimonial">"Absolutely life-changing. I can't imagine a day without TechMate!" – Priya S.</p>
+    </div>
+  </section>
+
+  <section id="buy">
+    <h2>Order Yours Today</h2>
+    <p>Be the first to experience the future.</p>
+    <a href="#" class="btn">Buy for ₹9,999</a>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 TechMate. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const testimonials = [
+      `"Absolutely life-changing. I can't imagine a day without TechMate!" – Priya S.`,
+      `"A must-have for every tech lover. The AI is smart and intuitive." – Aarav P.`,
+      `"Excellent build quality and amazing battery life!" – Meena R.`
+    ];
+
+    let index = 0;
+    const testimonialElement = document.getElementById("testimonial");
+
+    setInterval(() => {
+      index = (index + 1) % testimonials.length;
+      testimonialElement.textContent = testimonials[index];
+    }, 4000);
+  </script>
+</body>
+</html>
