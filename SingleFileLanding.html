@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AppLaunch | Landing Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      margin: auto;
+      max-width: 1100px;
+    }
+
+    header {
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #3498db;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    nav .btn {
+      background: #3498db;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #3498db, #8e44ad);
+      color: white;
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    .hero h2 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .btn-primary {
+      background: white;
+      color: #3498db;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .features {
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .features .grid {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      flex: 1 1 250px;
+      border-radius: 10px;
+    }
+
+    .testimonials {
+      background: #eee;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    blockquote {
+      font-style: italic;
+      font-size: 18px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    cite {
+      display: block;
+      margin-top: 10px;
+      color: #555;
+    }
+
+    footer {
+      background: #222;
+      color: #fff;
+      text-align: center;
+      padding: 30px 10px;
+    }
+
+    footer a {
+      color: #4da6ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1 class="logo">AppLaunch</h1>
+      <nav>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#" class="btn">Download</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h2>Launch Your App with Style</h2>
+      <p>Modern, simple and responsive landing page for your next big idea.</p>
+      <a href="#" class="btn-primary">Get Started</a>
+    </div>
+  </section>
+
+  <section id="features" class="features">
+    <div class="container">
+      <h2>Features</h2>
+      <div class="grid">
+        <div class="card">🚀 Fast Performance</div>
+        <div class="card">📱 Mobile Ready</div>
+        <div class="card">🎨 Beautiful Design</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials" class="testimonials">
+    <div class="container">
+      <h2>What People Say</h2>
+      <blockquote>
+        “This landing page made our app launch 10x easier. Love the design!”  
+        <cite>– A Happy Customer</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="container">
+      <p>Contact us at <a href="mailto:info@applaunch.com">info@applaunch.com</a></p>
+      <p>&copy; 2025 AppLaunch</p>
+    </div>
+  </footer>
+</body>
+</html>
