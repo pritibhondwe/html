@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple House Rental</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; }
+    header { background: #2d89ef; color: #fff; padding: 1rem; text-align: center; }
+    .container { max-width: 900px; margin: 2rem auto; background: #fff; padding: 2rem; border-radius: 8px; }
+    h2 { color: #2d89ef; }
+    .search-bar { margin-bottom: 2rem; }
+    .search-bar input { padding: 0.5rem; width: 200px; }
+    .property-list { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+    .property { background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; width: 270px; padding: 1rem; }
+    .property img { width: 100%; border-radius: 6px; }
+    .property h3 { margin: 0.5rem 0 0.2rem 0; }
+    .property p { margin: 0.2rem 0; font-size: 0.95rem; }
+    .property .price { color: #2d89ef; font-weight: bold; }
+    @media (max-width: 700px) {
+      .property-list { flex-direction: column; align-items: center; }
+      .property { width: 90%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Simple House Rental</h1>
+  </header>
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search by location..." oninput="filterProperties()">
+    </div>
+    <h2>Available Houses</h2>
+    <div class="property-list" id="propertyList">
+     
+    </div>
+  </div>
+  <script>
+    const properties = [
+      {
+        title: "Modern Apartment",
+        location: "Downtown",
+        price: "$1,200/month",
+        image: "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=400&q=80",
+        desc: "2 bed, 1 bath, close to metro."
+      },
+      {
+        title: "Cozy Family House",
+        location: "Suburbs",
+        price: "$2,000/month",
+        image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=400&q=80",
+        desc: "3 bed, 2 bath, big backyard."
+      },
+      {
+        title: "Luxury Condo",
+        location: "City Center",
+        price: "$2,800/month",
+        image: "https://images.unsplash.com/photo-1460518451285-97b6aa326961?auto=format&fit=crop&w=400&q=80",
+        desc: "2 bed, 2 bath, pool access."
+      },
+      {
+        title: "Budget Studio",
+        location: "Old Town",
+        price: "$800/month",
+        image: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=400&q=80",
+        desc: "1 bed, 1 bath, compact and affordable."
+      }
+    ];
+
+    function renderProperties(list) {
+      const container = document.getElementById('propertyList');
+      container.innerHTML = '';
+      if (list.length === 0) {
+        container.innerHTML = '<p>No properties found.</p>';
+        return;
+      }
+      list.forEach(p => {
+        container.innerHTML += `
+          <div class="property">
+            <img src="${p.image}" alt="${p.title}">
+            <h3>${p.title}</h3>
+            <p><strong>Location:</strong> ${p.location}</p>
+            <p class="price">${p.price}</p>
+            <p>${p.desc}</p>
+          </div>
+        `;
+      });
+    }
+
+    function filterProperties() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = properties.filter(p => p.location.toLowerCase().includes(query));
+      renderProperties(filtered);
+    }
+
+  
+    renderProperties(properties);
+  </script>
+</body>
+</html>
