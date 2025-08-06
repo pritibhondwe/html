@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🍨 IceCream Land</title>
+  <style>
+   
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fffaf2;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+    nav {
+      background: #ff69b4;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 1rem;
+      background: linear-gradient(to right, #ffb6c1, #ffe4e1);
+    }
+
+    .products {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .products h2 {
+      margin-bottom: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 1rem;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 10px;
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .card img:hover {
+      transform: scale(1.1);
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 0.6rem 1.2rem;
+      background: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ff1493;
+    }
+
+    .contact {
+      background-color: #fff0f5;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #eee;
+      font-size: 0.9rem;
+    }
+
+   
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #333;
+      color: white;
+      padding: 1rem;
+      border-radius: 5px;
+      display: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">IceCream Land</div>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#products">Menu</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header id="home">
+    <h1>Welcome to IceCream Land 🍨</h1>
+    <p>Discover your new favorite scoop!</p>
+  </header>
+
+  <section id="products" class="products">
+    <h2>Our Bestsellers</h2>
+    <div class="grid">
+      <!-- Card 1 -->
+      <div class="card">
+        <img src="https://i.imgur.com/1J0P8iC.jpg" alt="Vanilla Ice Cream">
+        <h3>Vanilla Dream</h3>
+        <p>₹50</p>
+        <button onclick="buy('Vanilla Dream')">Buy Now</button>
+      </div>
+      <!-- Card 2 -->
+      <div class="card">
+        <img src="https://i.imgur.com/dJcJp5a.jpg" alt="Chocolate Ice Cream">
+        <h3>Choco Madness</h3>
+        <p>₹60</p>
+        <button onclick="buy('Choco Madness')">Buy Now</button>
+      </div>
+      <!-- Card 3 -->
+      <div class="card">
+        <img src="https://i.imgur.com/OVM1D9U.jpg" alt="Strawberry Ice Cream">
+        <h3>Strawberry Love</h3>
+        <p>₹55</p>
+        <button onclick="buy('Strawberry Love')">Buy Now</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <h2>Contact Us</h2>
+    <p>Email: hello@icecreamland.com</p>
+    <p>Phone: +91-9876543210</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 IceCream Land. Made with ❤️</p>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    function buy(itemName) {
+      const toast = document.getElementById("toast");
+      toast.textContent = "You bought: " + itemName + " 🍨";
+      toast.style.display = "block";
+
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
