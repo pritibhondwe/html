@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Clone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f3f2ef;
+            color: #191919;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 24px;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1128px;
+            margin: 0 auto;
+            height: 52px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            background: #0a66c2;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 280px;
+            margin: 0 16px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 16px 8px 40px;
+            border: none;
+            border-radius: 4px;
+            background: #eef3f8;
+            font-size: 14px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #666;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            color: #191919;
+        }
+
+        .nav-item.active {
+            color: #191919;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .profile-pic {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #0a66c2;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1128px;
+            margin: 72px auto 0;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 24px;
+        }
+
+        /* Left Sidebar */
+        .left-sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            height: fit-content;
+            position: sticky;
+            top: 88px;
+        }
+
+        .profile-card {
+            text-align: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 16px;
+        }
+
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #0a66c2;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 auto 12px;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .profile-title {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .sidebar-section {
+            margin-bottom: 16px;
+        }
+
+        .sidebar-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .sidebar-item:hover {
+            color: #0a66c2;
+        }
+
+        .sidebar-item i {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        /* Main Feed */
+        .main-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .create-post {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .post-input {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .post-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #0a66c2;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .post-textarea {
+            flex: 1;
+            border: 1px solid #e0e0e0;
+            border-radius: 24px;
+            padding: 12px 16px;
+            resize: none;
+            font-family: inherit;
+            font-size: 14px;
+            background: #f3f2ef;
+        }
+
+        .post-textarea:focus {
+            outline: none;
+            border-color: #0a66c2;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .post-action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background: transparent;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .post-action-btn:hover {
+            background: #f3f2ef;
+        }
+
+        .post-action-btn i {
+            font-size: 16px;
+        }
+
+        /* Post Card */
+        .post-card {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .post-author-info {
+            flex: 1;
+        }
+
+        .post-author-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .post-author-title {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .post-time {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .post-content {
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #f3f2ef, #e0e0e0);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .post-stats {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .post-actions-bar {
+            display: flex;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 12px;
+        }
+
+        .post-action {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: #666;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .post-action:hover {
+            background: #f3f2ef;
+        }
+
+        .post-action.liked {
+            color: #0a66c2;
+        }
+
+      
+        .right-sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            height: fit-content;
+            position: sticky;
+            top: 88px;
+        }
+
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .news-title {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .news-link {
+            color: #0a66c2;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .news-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f2ef;
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-topic {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .news-headline {
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .news-meta {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr 2fr;
+            }
+            .right-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 16px;
+            }
+            .left-sidebar {
+                display: none;
+            }
+            .header-content {
+                padding: 0 16px;
+            }
+            .search-container {
+                display: none;
+            }
+        }
+
+        /* Icons using CSS */
+        .icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            stroke-width: 0;
+            stroke: currentColor;
+            fill: currentColor;
+        }
+
+        /* Custom icons */
+        .icon-home::before { content: "🏠"; }
+        .icon-network::before { content: "👥"; }
+        .icon-jobs::before { content: "💼"; }
+        .icon-messages::before { content: "💬"; }
+        .icon-notifications::before { content: "🔔"; }
+        .icon-search::before { content: "🔍"; }
+        .icon-photo::before { content: "📷"; }
+        .icon-video::before { content: "🎥"; }
+        .icon-event::before { content: "📅"; }
+        .icon-article::before { content: "📝"; }
+        .icon-like::before { content: "👍"; }
+        .icon-comment::before { content: "💬"; }
+        .icon-share::before { content: "🔄"; }
+        .icon-send::before { content: "📤"; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">in</div>
+            </div>
+            
+            <div class="search-container">
+                <span class="search-icon icon-search"></span>
+                <input type="text" class="search-input" placeholder="Search">
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <i class="icon-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="icon-network"></i>
+                    <span>My Network</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="icon-jobs"></i>
+                    <span>Jobs</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="icon-messages"></i>
+                    <span>Messaging</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="icon-notifications"></i>
+                    <span>Notifications</span>
+                </a>
+                <div class="profile-pic">JD</div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar">
+            <div class="profile-card">
+                <div class="profile-avatar">JD</div>
+                <div class="profile-name">John Doe</div>
+                <div class="profile-title">Software Engineer at Tech Corp</div>
+                <div class="profile-stats">
+                    <span>500+ connections</span>
+                    <span>•</span>
+                    <span>Grow your network</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Recent</div>
+                <div class="sidebar-item">
+                    <i class="icon-search"></i>
+                    <span>React Development</span>
+                </div>
+                <div class="sidebar-item">
+                    <i class="icon-search"></i>
+                    <span>JavaScript</span>
+                </div>
+                <div class="sidebar-item">
+                    <i class="icon-search"></i>
+                    <span>Web Development</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Groups</div>
+                <div class="sidebar-item">
+                    <i class="icon-network"></i>
+                    <span>React Developers</span>
+                </div>
+                <div class="sidebar-item">
+                    <i class="icon-network"></i>
+                    <span>JavaScript Community</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Feed -->
+        <main class="main-feed">
+            <!-- Create Post -->
+            <div class="create-post">
+                <div class="post-input">
+                    <div class="post-avatar">JD</div>
+                    <textarea class="post-textarea" placeholder="Start a post" rows="1"></textarea>
+                </div>
+                <div class="post-actions">
+                    <button class="post-action-btn">
+                        <i class="icon-photo"></i>
+                        <span>Photo</span>
+                    </button>
+                    <button class="post-action-btn">
+                        <i class="icon-video"></i>
+                        <span>Video</span>
+                    </button>
+                    <button class="post-action-btn">
+                        <i class="icon-event"></i>
+                        <span>Event</span>
+                    </button>
+                    <button class="post-action-btn">
+                        <i class="icon-article"></i>
+                        <span>Write article</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Posts Container -->
+            <div id="posts-container">
+                <!-- Posts will be dynamically generated here -->
+            </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div class="news-header">
+                <div class="news-title">LinkedIn News</div>
+                <a href="#" class="news-link">See all</a>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-topic">Top news • 1d</div>
+                <div class="news-headline">Tech companies announce new AI initiatives</div>
+                <div class="news-meta">1,234 readers</div>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-topic">Trending • 2d</div>
+                <div class="news-headline">Remote work continues to reshape the industry</div>
+                <div class="news-meta">5,678 readers</div>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-topic">Top news • 3d</div>
+                <div class="news-headline">New programming languages gaining popularity</div>
+                <div class="news-meta">3,456 readers</div>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-topic">Trending • 4d</div>
+                <div class="news-headline">Cybersecurity concerns rise in 2024</div>
+                <div class="news-meta">2,789 readers</div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+     
+        const posts = [
+            {
+                id: 1,
+                author: {
+                    name: "Sarah Johnson",
+                    title: "Senior Frontend Developer at Google",
+                    avatar: "SJ"
+                },
+                content: "Just completed an amazing React project! The new hooks and context API made state management so much cleaner. What's your favorite React feature? 🤔",
+                image: null,
+                time: "2 hours ago",
+                likes: 45,
+                comments: 12,
+                shares: 3,
+                isLiked: false
+            },
+            {
+                id: 2,
+                author: {
+                    name: "Mike Chen",
+                    title: "Tech Lead at Microsoft",
+                    avatar: "MC"
+                },
+                content: "Excited to share that our team just launched a new AI-powered feature! The journey from concept to production was incredible. Here's what we learned...",
+                image: "AI Project Screenshot",
+                time: "5 hours ago",
+                likes: 89,
+                comments: 23,
+                shares: 7,
+                isLiked: true
+            },
+            {
+                id: 3,
+                author: {
+                    name: "Emily Rodriguez",
+                    title: "UX Designer at Apple",
+                    avatar: "ER"
+                },
+                content: "Design tip of the day: Always consider accessibility first. Your users will thank you! What accessibility features are you implementing in your current projects?",
+                time: "1 day ago",
+                likes: 67,
+                comments: 18,
+                shares: 4,
+                isLiked: false
+            },
+            {
+                id: 4,
+                author: {
+                    name: "David Kim",
+                    title: "Full Stack Developer at Netflix",
+                    avatar: "DK"
+                },
+                content: "Just finished reading 'Clean Code' by Robert Martin. Highly recommend it to every developer! What's the best programming book you've read recently?",
+                time: "2 days ago",
+                likes: 123,
+                comments: 34,
+                shares: 9,
+                isLiked: false
+            }
+        ];
+
+        
+        function renderPosts() {
+            const postsContainer = document.getElementById('posts-container');
+            postsContainer.innerHTML = '';
+
+            posts.forEach(post => {
+                const postElement = createPostElement(post);
+                postsContainer.appendChild(postElement);
+            });
+        }
+
+       
+        function createPostElement(post) {
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post-card';
+            postDiv.innerHTML = `
+                <div class="post-header">
+                    <div class="post-avatar">${post.author.avatar}</div>
+                    <div class="post-author-info">
+                        <div class="post-author-name">${post.author.name}</div>
+                        <div class="post-author-title">${post.author.title}</div>
+                        <div class="post-time">${post.time}</div>
+                    </div>
+                </div>
+                <div class="post-content">${post.content}</div>
+                ${post.image ? `<div class="post-image">${post.image}</div>` : ''}
+                <div class="post-stats">
+                    <span>${post.likes} • ${post.comments} comments • ${post.shares} shares</span>
+                </div>
+                <div class="post-actions-bar">
+                    <button class="post-action ${post.isLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                        <i class="icon-like"></i>
+                        <span>Like</span>
+                    </button>
+                    <button class="post-action" onclick="addComment(${post.id})">
+                        <i class="icon-comment"></i>
+                        <span>Comment</span>
+                    </button>
+                    <button class="post-action" onclick="sharePost(${post.id})">
+                        <i class="icon-share"></i>
+                        <span>Share</span>
+                    </button>
+                    <button class="post-action" onclick="sendPost(${post.id})">
+                        <i class="icon-send"></i>
+                        <span>Send</span>
+                    </button>
+                </div>
+            `;
+            return postDiv;
+        }
+
+     
+        function toggleLike(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.isLiked = !post.isLiked;
+                post.likes += post.isLiked ? 1 : -1;
+                renderPosts();
+            }
+        }
+
+        
+        function addComment(postId) {
+            const comment = prompt('Add a comment:');
+            if (comment) {
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    post.comments += 1;
+                    renderPosts();
+                    alert('Comment added!');
+                }
+            }
+        }
+
+        
+        function sharePost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.shares += 1;
+                renderPosts();
+                alert('Post shared!');
+            }
+        }
+
+        function sendPost(postId) {
+            alert('Post sent to your network!');
+        }
+
+       
+        function handleCreatePost() {
+            const textarea = document.querySelector('.post-textarea');
+            const content = textarea.value.trim();
+            
+            if (content) {
+                const newPost = {
+                    id: posts.length + 1,
+                    author: {
+                        name: "John Doe",
+                        title: "Software Engineer at Tech Corp",
+                        avatar: "JD"
+                    },
+                    content: content,
+                    image: null,
+                    time: "Just now",
+                    likes: 0,
+                    comments: 0,
+                    shares: 0,
+                    isLiked: false
+                };
+                
+                posts.unshift(newPost);
+                textarea.value = '';
+                renderPosts();
+            }
+        }
+
+       
+        function autoResizeTextarea() {
+            const textarea = document.querySelector('.post-textarea');
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        }
+
+        function handlePostActions() {
+            const actionButtons = document.querySelectorAll('.post-action-btn');
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.querySelector('span').textContent;
+                    if (action === 'Photo' || action === 'Video' || action === 'Event' || action === 'Write article') {
+                        alert(`${action} feature clicked!`);
+                    }
+                });
+            });
+        }
+
+       
+        function init() {
+            renderPosts();
+            autoResizeTextarea();
+            handlePostActions();
+            
+          
+            const textarea = document.querySelector('.post-textarea');
+            textarea.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleCreatePost();
+                }
+            });
+        }
+
+        
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
