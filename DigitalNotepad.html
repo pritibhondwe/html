@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Notepad</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .notepad-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .toolbar {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1e7e34;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+            transform: translateY(-2px);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            background: #17a2b8;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .file-label:hover {
+            background: #138496;
+            transform: translateY(-2px);
+        }
+
+        .status {
+            margin-left: auto;
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filename-input {
+            padding: 10px 20px;
+            border: none;
+            border-bottom: 2px solid #e9ecef;
+            font-size: 1rem;
+            font-weight: 500;
+            background: #f8f9fa;
+            transition: border-color 0.3s ease;
+        }
+
+        .filename-input:focus {
+            outline: none;
+            border-bottom-color: #007bff;
+        }
+
+        .text-editor {
+            flex: 1;
+            padding: 20px;
+            border: none;
+            resize: none;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background: #fafafa;
+            transition: background 0.3s ease;
+        }
+
+        .text-editor:focus {
+            outline: none;
+            background: white;
+        }
+
+        .word-count {
+            background: #e9ecef;
+            padding: 10px 20px;
+            text-align: right;
+            font-size: 0.8rem;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .saved-notes {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .saved-notes h2 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+
+        .notes-list {
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .note-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .note-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .note-preview {
+            color: #6c757d;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .note-date {
+            font-size: 0.8rem;
+            color: #adb5bd;
+            margin-top: 5px;
+        }
+
+        .empty-notes {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 40px 20px;
+        }
+
+        @media (max-width: 768px) {
+            .notepad-container {
+                margin: 10px;
+                min-height: 500px;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+
+            .status {
+                margin-left: 0;
+                text-align: center;
+                margin-top: 10px;
+            }
+        }
+
+        .icon {
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="notepad-container">
+        <div class="header">
+            <h1>📝 Digital Notepad</h1>
+            <p>Create, save, and manage your notes easily</p>
+        </div>
+
+        <div class="toolbar">
+            <button class="btn btn-primary" onclick="newNote()">
+                <span class="icon">📄</span> New Note
+            </button>
+            <button class="btn btn-success" onclick="saveNote()">
+                <span class="icon">💾</span> Save
+            </button>
+            <button class="btn btn-secondary" onclick="loadNote()">
+                <span class="icon">📂</span> Load
+            </button>
+            <button class="btn btn-danger" onclick="clearNote()">
+                <span class="icon">🗑️</span> Clear
+            </button>
+            <label class="file-label">
+                <span class="icon">📁</span> Import File
+                <input type="file" class="file-input" id="fileInput" accept=".txt,.html,.js,.css,.json">
+            </label>
+            <div class="status" id="status">Ready</div>
+        </div>
+
+        <div class="editor-container">
+            <input type="text" class="filename-input" id="filenameInput" placeholder="Enter note title..." maxlength="50">
+            <textarea class="text-editor" id="textEditor" placeholder="Start typing your note here..."></textarea>
+            <div class="word-count" id="wordCount">Words: 0 | Characters: 0</div>
+        </div>
+    </div>
+
+    <div class="saved-notes">
+        <h2>📚 Saved Notes</h2>
+        <div class="notes-list" id="notesList">
+            <div class="empty-notes">No saved notes yet. Create your first note!</div>
+        </div>
+    </div>
+
+    <script>
+        
+        const textEditor = document.getElementById('textEditor');
+        const filenameInput = document.getElementById('filenameInput');
+        const wordCount = document.getElementById('wordCount');
+        const status = document.getElementById('status');
+        const fileInput = document.getElementById('fileInput');
+        const notesList = document.getElementById('notesList');
+
+        let autoSaveTimer;
+
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedNotes();
+            updateWordCount();
+            
+            textEditor.addEventListener('input', function() {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(autoSave, 2000);
+                updateWordCount();
+            });
+
+         
+            fileInput.addEventListener('change', handleFileImport);
+        });
+
+        function updateWordCount() {
+            const text = textEditor.value;
+            const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+            const characters = text.length;
+            wordCount.textContent = `Words: ${words} | Characters: ${characters}`;
+        }
+
+      
+        function autoSave() {
+            if (textEditor.value.trim() && filenameInput.value.trim()) {
+                saveNoteToStorage();
+                showStatus('Auto-saved', 'success');
+            }
+        }
+
+        
+        function showStatus(message, type = 'info') {
+            status.textContent = message;
+            status.style.color = type === 'success' ? '#28a745' : 
+                               type === 'error' ? '#dc3545' : '#6c757d';
+            setTimeout(() => {
+                status.textContent = 'Ready';
+                status.style.color = '#6c757d';
+            }, 3000);
+        }
+
+       
+        function newNote() {
+            if (confirm('Are you sure you want to create a new note? Any unsaved changes will be lost.')) {
+                textEditor.value = '';
+                filenameInput.value = '';
+                updateWordCount();
+                showStatus('New note created');
+            }
+        }
+
+     
+        function saveNote() {
+            const title = filenameInput.value.trim();
+            const content = textEditor.value.trim();
+
+            if (!title) {
+                alert('Please enter a title for your note.');
+                filenameInput.focus();
+                return;
+            }
+
+            if (!content) {
+                alert('Please enter some content for your note.');
+                textEditor.focus();
+                return;
+            }
+
+            saveNoteToStorage();
+            showStatus('Note saved successfully!', 'success');
+            loadSavedNotes();
+        }
+
+       
+        function saveNoteToStorage() {
+            const title = filenameInput.value.trim();
+            const content = textEditor.value;
+            const timestamp = new Date().toISOString();
+            
+            const note = {
+                title: title,
+                content: content,
+                timestamp: timestamp,
+                lastModified: new Date().toISOString()
+            };
+
+            const savedNotes = JSON.parse(localStorage.getItem('notepad_notes') || '{}');
+            savedNotes[title] = note;
+            localStorage.setItem('notepad_notes', JSON.stringify(savedNotes));
+        }
+
+           function loadSavedNotes() {
+            const savedNotes = JSON.parse(localStorage.getItem('notepad_notes') || '{}');
+            const notes = Object.values(savedNotes);
+            
+            if (notes.length === 0) {
+                notesList.innerHTML = '<div class="empty-notes">No saved notes yet. Create your first note!</div>';
+                return;
+            }
+
+            notes.sort((a, b) => new Date(b.lastModified) - new Date(a.lastModified));
+
+            notesList.innerHTML = notes.map(note => `
+                <div class="note-item" onclick="loadNoteFromStorage('${note.title}')">
+                    <div class="note-title">${note.title}</div>
+                    <div class="note-preview">${note.content.substring(0, 100)}${note.content.length > 100 ? '...' : ''}</div>
+                    <div class="note-date">Last modified: ${new Date(note.lastModified).toLocaleString()}</div>
+                </div>
+            `).join('');
+        }
+
+        function loadNoteFromStorage(title) {
+            const savedNotes = JSON.parse(localStorage.getItem('notepad_notes') || '{}');
+            const note = savedNotes[title];
+            
+            if (note) {
+                filenameInput.value = note.title;
+                textEditor.value = note.content;
+                updateWordCount();
+                showStatus(`Loaded: ${note.title}`);
+            }
+        }
+
+        function loadNote() {
+            const savedNotes = JSON.parse(localStorage.getItem('notepad_notes') || '{}');
+            const titles = Object.keys(savedNotes);
+            
+            if (titles.length === 0) {
+                alert('No saved notes found.');
+                return;
+            }
+
+            const title = prompt('Enter the title of the note to load:\n\nAvailable notes:\n' + titles.join('\n'));
+            
+            if (title && savedNotes[title]) {
+                loadNoteFromStorage(title);
+            }
+        }
+
+      
+        function clearNote() {
+            if (confirm('Are you sure you want to clear the current note?')) {
+                textEditor.value = '';
+                filenameInput.value = '';
+                updateWordCount();
+                showStatus('Note cleared');
+            }
+        }
+
+       
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                textEditor.value = content;
+                filenameInput.value = file.name.replace(/\.[^/.]+$/, ""); // Remove file extension
+                updateWordCount();
+                showStatus(`Imported: ${file.name}`);
+            };
+            reader.readAsText(file);
+            
+          
+            event.target.value = '';
+        }
+
+        
+        document.addEventListener('keydown', function(e) {
+          
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                saveNote();
+            }
+            
+       
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                newNote();
+            }
+        });
+
+       
+        function exportNote() {
+            const title = filenameInput.value.trim();
+            const content = textEditor.value;
+            
+            if (!title || !content) {
+                alert('Please enter both title and content before exporting.');
+                return;
+            }
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${title}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showStatus('Note exported successfully!', 'success');
+        }
+
+       
+        const toolbar = document.querySelector('.toolbar');
+        const exportBtn = document.createElement('button');
+        exportBtn.className = 'btn btn-secondary';
+        exportBtn.innerHTML = '<span class="icon">📤</span> Export';
+        exportBtn.onclick = exportNote;
+        toolbar.insertBefore(exportBtn, toolbar.querySelector('.status'));
+    </script>
+</body>
+</html>
