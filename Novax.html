@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NovaX — Next‑Gen Web Solutions</title>
+  <meta name="description" content="NovaX is a modern, responsive single‑page website template built with pure HTML, CSS, and JavaScript. Dark mode, animations, and clean UI."/>
+  <style>
+    
+    :root{
+      --bg: #0b0d10;
+      --surface: #12151a;
+      --text: #e7ebf3;
+      --muted: #a8b0c2;
+      --brand: #6c8cff;
+      --brand-2: #7cf7d4;
+      --accent: #ffd166;
+      --danger: #ff6b6b;
+      --ring: 0 0 0 3px rgba(108,140,255,.35);
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.4);
+      --maxw: 1200px;
+      --grid-gap: 22px;
+      --transition: 220ms cubic-bezier(.2,.8,.2,1);
+    }
+
+   
+    @media (prefers-color-scheme: light) {
+      :root{ 
+        --bg: #f7f8fb; 
+        --surface: #ffffff; 
+        --text: #111319; 
+        --muted: #546072; 
+        --brand: #4b6bff; 
+        --brand-2: #00d1b2; 
+        --accent: #ffb703; 
+        --danger: #e63946; 
+        --shadow: 0 10px 30px rgba(16,24,40,.08);
+      }
+    }
+
+   
+    .dark {
+      --bg: #0b0d10;
+      --surface: #12151a;
+      --text: #e7ebf3;
+      --muted: #a8b0c2;
+      --brand: #6c8cff;
+      --brand-2: #7cf7d4;
+      --accent: #ffd166;
+      --danger: #ff6b6b;
+      --shadow: 0 10px 30px rgba(0,0,0,.4);
+    }
+
+    * { box-sizing: border-box }
+    html { scroll-behavior: smooth }
+    body {
+      margin: 0; font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text); background: radial-gradient(1200px 600px at 10% -20%, rgba(108,140,255,.15), transparent 60%),
+              radial-gradient(800px 500px at 110% 10%, rgba(124,247,212,.12), transparent 60%), var(--bg);
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: inherit; text-decoration: none }
+    img { max-width: 100%; height: auto; display: block; border-radius: calc(var(--radius) - 8px) }
+    .container { width: min(100% - 40px, var(--maxw)); margin-inline: auto }
+    .pill { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background: color-mix(in oklab, var(--brand) 15%, transparent); color: var(--brand); font-weight:600 }
+    .btn { display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius: 14px; font-weight:600; border:1px solid transparent; transition: transform var(--transition), box-shadow var(--transition), background var(--transition), border-color var(--transition)}
+    .btn:hover { transform: translateY(-2px) }
+    .btn-primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color:#0b0d10; box-shadow: var(--shadow) }
+    .btn-outline  { background: transparent; border-color: color-mix(in oklab, var(--brand) 25%, var(--text)); color: var(--text) }
+
+   
+    header{ position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(180%) blur(8px); background: color-mix(in oklab, var(--bg) 85%, transparent); border-bottom: 1px solid color-mix(in oklab, var(--surface) 80%, transparent) }
+    .nav{ display:flex; align-items:center; justify-content:space-between; padding: 14px 0 }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.3px }
+    .logo{ width:34px; height:34px; border-radius:10px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); display:grid; place-items:center; color:#0b0d10; font-weight:900 }
+    nav ul{ display:flex; gap: 20px; list-style:none; padding:0; margin:0 }
+    nav a{ padding:10px 12px; border-radius: 10px; color: var(--muted); font-weight:600 }
+    nav a.active, nav a:hover{ color: var(--text); background: color-mix(in oklab, var(--brand) 12%, transparent) }
+    .actions{ display:flex; align-items:center; gap:10px }
+    .menu-btn{ display:none; border:1px solid color-mix(in oklab, var(--brand) 25%, var(--text)); padding:10px 12px; border-radius:12px; background:transparent }
+
+
+    .mobile{ display:none; position:fixed; inset:60px 16px auto 16px; background: var(--surface); border:1px solid color-mix(in oklab, var(--surface) 70%, transparent); border-radius: 16px; padding:14px; box-shadow: var(--shadow) }
+    .mobile a{ display:block; padding:12px 14px; border-radius:12px; color: var(--muted) }
+    .mobile a:hover{ background: color-mix(in oklab, var(--brand) 10%, transparent); color: var(--text) }
+
+    
+    .hero{ padding: 80px 0 40px }
+    .hero-grid{ display:grid; grid-template-columns: 1.2fr .8fr; gap: var(--grid-gap); align-items:center }
+    .headline{ font-size: clamp(28px, 4vw, 56px); line-height: 1.05; margin: 8px 0 16px }
+    .sub{ font-size: clamp(14px, 2.1vw, 18px); color: var(--muted); max-width: 62ch }
+    .hero-card{ background: linear-gradient(135deg, color-mix(in oklab, var(--surface) 90%, transparent), color-mix(in oklab, var(--brand) 6%, transparent)); border:1px solid color-mix(in oklab, var(--surface) 70%, transparent); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow) }
+    .hero-stats{ display:grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 18px }
+    .stat{ padding: 14px; background: color-mix(in oklab, var(--surface) 92%, transparent); border:1px solid color-mix(in oklab, var(--surface) 75%, transparent); border-radius: 14px; text-align:center }
+    .stat .n{ font-size: 26px; font-weight: 900 }
+    .stat .l{ color: var(--muted); font-size: 13px }
+
+  
+    section { padding: 70px 0 }
+    .grid-3{ display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap) }
+    .grid-2{ display:grid; grid-template-columns: repeat(2, 1fr); gap: var(--grid-gap) }
+    .card{ background: var(--surface); border:1px solid color-mix(in oklab, var(--surface) 70%, transparent); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow) }
+    .card h3{ margin:0 0 6px }
+    .muted{ color: var(--muted) }
+
+   
+    .feature{ display:flex; gap:14px }
+    .icon{ width:40px; height:40px; border-radius: 12px; background: color-mix(in oklab, var(--brand) 18%, transparent); display:grid; place-items:center }
+
+ 
+    .portfolio img{ aspect-ratio: 4 / 3; object-fit: cover }
+    .portfolio .card{ padding: 0; overflow:hidden }
+    .portfolio .meta{ padding: 12px 14px; display:flex; justify-content: space-between; align-items:center }
+
+   
+    .price{ font-size: 42px; font-weight:900 }
+    .line{ display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed color-mix(in oklab, var(--surface) 70%, transparent) }
+
+ 
+    .quote{ font-size: 18px }
+    .avatar{ width:44px; height:44px; border-radius:50%; object-fit:cover }
+
+    /* CTA */
+    .cta{ text-align:center; background: linear-gradient(135deg, color-mix(in oklab, var(--brand) 14%, var(--surface)), color-mix(in oklab, var(--brand-2) 14%, var(--surface))); border:1px solid color-mix(in oklab, var(--surface) 70%, transparent) }
+
+    /* Footer */
+    footer{ padding: 40px 0; color: var(--muted) }
+    .foot{ display:grid; grid-template-columns: 1.2fr .8fr; gap: var(--grid-gap) }
+    .social{ display:flex; gap:12px }
+    .chip{ padding: 8px 10px; border-radius:10px; background: color-mix(in oklab, var(--brand) 10%, transparent) }
+
+    /* Utilities */
+    .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(1px,1px,1px,1px) }
+    .shadow{ box-shadow: var(--shadow) }
+    .reveal{ opacity:0; transform: translateY(16px); transition: opacity var(--transition), transform var(--transition) }
+    .reveal.is-visible{ opacity:1; transform: translateY(0) }
+
+   
+    @media (max-width: 900px){
+      .hero-grid{ grid-template-columns: 1fr; }
+      .grid-3{ grid-template-columns: 1fr 1fr }
+      .grid-2, .foot{ grid-template-columns: 1fr }
+      .hero{ padding-top: 60px }
+    }
+    @media (max-width: 640px){
+      nav ul{ display:none }
+      .menu-btn{ display:inline-flex }
+      .grid-3{ grid-template-columns: 1fr }
+      .hero-stats{ grid-template-columns: 1fr 1fr }
+    }
+  </style>
+</head>
+<body>
+  
+  <header>
+    <div class="container nav">
+      <a href="#home" class="brand" aria-label="NovaX Home">
+        <div class="logo" aria-hidden="true">NX</div>
+        <span>NovaX</span>
+      </a>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="actions">
+        <button id="themeToggle" class="btn btn-outline" aria-label="Toggle dark mode">🌓</button>
+        <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileNav">☰</button>
+      </div>
+    </div>
+    <div id="mobileNav" class="mobile" hidden>
+      <a href="#features">Features</a>
+      <a href="#work">Work</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </header>
+
+ 
+  <main id="home" class="hero container">
+    <div class="hero-grid">
+      <div>
+        <span class="pill">🚀 New • Top‑tier template</span>
+        <h1 class="headline">Build fast, look sharp, convert better.</h1>
+        <p class="sub">NovaX is a sleek, production‑ready single‑page template using just HTML, CSS, and JavaScript. It ships with dark mode, animations, lazy‑loaded images, a11y‑friendly components, and clean, modern design.</p>
+        <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap">
+          <a class="btn btn-primary" href="#features">Explore Features →</a>
+          <a class="btn btn-outline" href="#contact">Get Started</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="n">98</div><div class="l">Lighthouse UX</div></div>
+          <div class="stat"><div class="n"><span id="counter-users">8k+</span></div><div class="l">Users Reached</div></div>
+          <div class="stat"><div class="n"><span id="counter-stars">4.9★</span></div><div class="l">Avg. Rating</div></div>
+        </div>
+      </div>
+      <div class="hero-card reveal">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop" alt="Sleek laptop with code on screen"/>
+        <div style="display:flex; gap:12px; margin-top:12px">
+          <div class="chip">⚡ Performance‑first</div>
+          <div class="chip">🔒 Privacy‑friendly</div>
+          <div class="chip">🌗 Auto dark mode</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+ 
+  <section id="features" class="container">
+    <h2 class="reveal">Why teams pick NovaX</h2>
+    <p class="muted reveal">A carefully‑crafted UI kit with just the essentials to get you from idea to launch, faster.</p>
+    <div class="grid-3" style="margin-top: 18px">
+      <div class="card feature reveal">
+        <div class="icon" aria-hidden="true">💎</div>
+        <div>
+          <h3>Polished UI</h3>
+          <p class="muted">Sensible spacing, fluid typography, and delightful micro‑interactions baked in.</p>
+        </div>
+      </div>
+      <div class="card feature reveal">
+        <div class="icon" aria-hidden="true">🧩</div>
+        <div>
+          <h3>Modular Components</h3>
+          <p class="muted">Cards, badges, grids, chips, and buttons you can reuse and remix.</p>
+        </div>
+      </div>
+      <div class="card feature reveal">
+        <div class="icon" aria-hidden="true">⚙️</div>
+        <div>
+          <h3>Zero Dependencies</h3>
+          <p class="muted">Pure HTML/CSS/JS — no frameworks required. Works everywhere.</p>
+        </div>
+      </div>
+      <div class="card feature reveal">
+        <div class="icon" aria-hidden="true">🌗</div>
+        <div>
+          <h3>Dark Mode</h3>
+          <p class="muted">Respects system theme with a manual toggle and local persistence.</p>
+        </div>
+      </div>
+      <div class="card feature reveal">
+        <div class="icon" aria-hidden="true">🛡️</div>
+        <div>
+          <h3>Accessible</h3>
+          <p class="muted">Keyboard‑friendly, semantic markup, ARIA labels, and contrast‑aware colors.</p>
+        </div>
+      </div>
+      <div class="card feature reveal">
+        <div class="icon" aria-hidden="true">🚀</div>
+        <div>
+          <h3>Performance</h3>
+          <p class="muted">Lazy images, lean CSS, and IntersectionObserver scroll reveals.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="work" class="container">
+    <h2 class="reveal">Selected Work</h2>
+    <p class="muted reveal">A simple 6‑card grid. Replace images and text with your own projects.</p>
+    <div class="grid-3 portfolio" style="margin-top: 18px">
+      <!-- Card 1 -->
+      <article class="card reveal shadow">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1526378722484-bd91ca387e72?q=80&w=1200&auto=format&fit=crop" alt="Dashboard interface"/>
+        <div class="meta">
+          <div>
+            <strong>Pulse</strong>
+            <div class="muted">Analytics Dashboard</div>
+          </div>
+          <a class="btn btn-outline" href="#">Live →</a>
+        </div>
+      </article>
+      <!-- Card 2 -->
+      <article class="card reveal shadow">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop" alt="Team collaboration"/>
+        <div class="meta">
+          <div>
+            <strong>CollabX</strong>
+            <div class="muted">Team Workspace</div>
+          </div>
+          <a class="btn btn-outline" href="#">Case →</a>
+        </div>
+      </article>
+    
+      <article class="card reveal shadow">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop" alt="Smartphone app UI"/>
+        <div class="meta">
+          <div>
+            <strong>NovaApp</strong>
+            <div class="muted">Mobile Experience</div>
+          </div>
+          <a class="btn btn-outline" href="#">Details →</a>
+        </div>
+      </article>
+     
+      <article class="card reveal shadow">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop" alt="Designer desk"/>
+        <div class="meta">
+          <div>
+            <strong>BrandKit</strong>
+            <div class="muted">Identity System</div>
+          </div>
+          <a class="btn btn-outline" href="#">Docs →</a>
+        </div>
+      </article>
+   
+      <article class="card reveal shadow">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop" alt="Code editor"/>
+        <div class="meta">
+          <div>
+            <strong>EdgeSite</strong>
+            <div class="muted">Static Site</div>
+          </div>
+          <a class="btn btn-outline" href="#">Repo →</a>
+        </div>
+      </article>
+      
+      <article class="card reveal shadow">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop" alt="Startup meeting"/>
+        <div class="meta">
+          <div>
+            <strong>LaunchPad</strong>
+            <div class="muted">Go‑To‑Market</div>
+          </div>
+          <a class="btn btn-outline" href="#">More →</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+
+  <section id="pricing" class="container">
+    <h2 class="reveal">Simple Pricing</h2>
+    <p class="muted reveal">Transparent plans that grow with you. Cancel anytime.</p>
+    <div class="grid-3" style="margin-top: 18px">
+      <div class="card reveal">
+        <h3>Starter</h3>
+        <div class="muted">For personal sites</div>
+        <div class="price">₹0</div>
+        <div class="line"><span>1 project</span><span>✔</span></div>
+        <div class="line"><span>Email support</span><span>✔</span></div>
+        <div class="line"><span>Community access</span><span>✔</span></div>
+        <div style="margin-top:12px"><a class="btn btn-outline" href="#contact">Choose</a></div>
+      </div>
+      <div class="card reveal" style="border-color: color-mix(in oklab, var(--brand) 40%, var(--surface)); box-shadow: 0 10px 30px rgba(108,140,255,.25)">
+        <h3>Pro</h3>
+        <div class="muted">Best for startups</div>
+        <div class="price">₹1,499</div>
+        <div class="line"><span>Unlimited projects</span><span>✔</span></div>
+        <div class="line"><span>Priority support</span><span>✔</span></div>
+        <div class="line"><span>Analytics add‑on</span><span>✔</span></div>
+        <div style="margin-top:12px"><a class="btn btn-primary" href="#contact">Go Pro</a></div>
+      </div>
+      <div class="card reveal">
+        <h3>Enterprise</h3>
+        <div class="muted">Custom solutions</div>
+        <div class="price">Let’s talk</div>
+        <div class="line"><span>SLA & SSO</span><span>✔</span></div>
+        <div class="line"><span>Dedicated manager</span><span>✔</span></div>
+        <div class="line"><span>On‑prem options</span><span>✔</span></div>
+        <div style="margin-top:12px"><a class="btn btn-outline" href="#contact">Contact</a></div>
+      </div>
+    </div>
+  </section>
+
+ 
+  <section class="container" aria-label="Testimonials">
+    <h2 class="reveal">Loved by builders</h2>
+    <div class="grid-3" style="margin-top:18px">
+      <figure class="card reveal">
+        <blockquote class="quote">“Ridiculously clean and fast. We shipped our MVP in a weekend.”</blockquote>
+        <figcaption class="muted" style="display:flex; align-items:center; gap:10px; margin-top:10px">
+          <img class="avatar" loading="lazy" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop" alt="Portrait of Sarah"/>
+          Sarah Patel — Product Lead
+        </figcaption>
+      </figure>
+      <figure class="card reveal">
+        <blockquote class="quote">“Best no‑nonsense template I’ve used. The dark mode is *chef’s kiss*.”</blockquote>
+        <figcaption class="muted" style="display:flex; align-items:center; gap:10px; margin-top:10px">
+          <img class="avatar" loading="lazy" src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=400&auto=format&fit=crop" alt="Portrait of Daniel"/>
+          Daniel Rao — Indie Dev
+        </figcaption>
+      </figure>
+      <figure class="card reveal">
+        <blockquote class="quote">“We cloned it, tweaked copy, and launched. Our CTR jumped 22%.”</blockquote>
+        <figcaption class="muted" style="display:flex; align-items:center; gap:10px; margin-top:10px">
+          <img class="avatar" loading="lazy" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop" alt="Portrait of Priya"/>
+          Priya Mehta — Growth Marketer
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="contact" class="container">
+    <div class="card grid-2">
+      <div>
+        <h2>Ready to build something great?</h2>
+        <p class="muted">Drop a message. This form uses basic HTML — wire it to your backend or a service like EmailJS.</p>
+        <ul class="muted">
+          <li>✅ Accessible labels</li>
+          <li>✅ Client‑side validation</li>
+          <li>✅ No external libs</li>
+        </ul>
+      </div>
+      <form id="contactForm" novalidate>
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" required minlength="2" placeholder="Your name" style="width:100%; padding:12px; border-radius:10px; border:1px solid color-mix(in oklab, var(--surface) 70%, transparent); margin:6px 0 12px; background:var(--surface); color:var(--text)">
+
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required placeholder="you@example.com" style="width:100%; padding:12px; border-radius:10px; border:1px solid color-mix(in oklab, var(--surface) 70%, transparent); margin:6px 0 12px; background:var(--surface); color:var(--text)">
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required minlength="10" placeholder="Tell us about your project" rows="4" style="width:100%; padding:12px; border-radius:10px; border:1px solid color-mix(in oklab, var(--surface) 70%, transparent); margin:6px 0 12px; background:var(--surface); color:var(--text)"></textarea>
+
+        <div style="display:flex; gap:10px; align-items:center; justify-content:space-between">
+          <button class="btn btn-primary" type="submit">Send Message</button>
+          <small id="formMsg" class="muted" role="status" aria-live="polite"></small>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="container cta card">
+    <h2>Install • Customize • Launch</h2>
+    <p class="muted">Built for speed and simplicity. Copy this file, tweak the content, and you have a beautiful site in minutes.</p>
+    <div style="display:flex; gap:10px; justify-content:center">
+      <a class="btn btn-primary" href="#pricing">See Pricing</a>
+      <a class="btn btn-outline" href="#work">View Work</a>
+    </div>
+  </section>
+
+  <footer class="container">
+    <div class="foot">
+      <div>
+        <div class="brand"><div class="logo">NX</div> NovaX</div>
+        <p class="muted">© <span id="year"></span> NovaX Studio. All rights reserved.</p>
+        <div class="social">
+          <a class="btn btn-outline" href="#" aria-label="Twitter">𝕏</a>
+          <a class="btn btn-outline" href="#" aria-label="GitHub">GH</a>
+          <a class="btn btn-outline" href="#" aria-label="LinkedIn">in</a>
+        </div>
+      </div>
+      <div>
+        <div class="muted">Subscribe for tips</div>
+        <form id="subForm" class="card" style="display:flex; gap:8px; margin-top:8px">
+          <input type="email" id="subEmail" placeholder="you@example.com" required style="flex:1; padding:12px; border-radius:12px; border:1px solid color-mix(in oklab, var(--surface) 70%, transparent); background:var(--surface); color:var(--text)">
+          <button class="btn btn-primary" type="submit">Join</button>
+        </form>
+      </div>
+    </div>
+    <div style="margin-top: 16px; display:flex; justify-content:space-between; align-items:center">
+      <small class="muted">Privacy • Terms • Cookies</small>
+      <button id="toTop" class="btn btn-outline" aria-label="Back to top">↑</button>
+    </div>
+  </footer>
+
+  <script>
+   
+    const qs = (s, p=document) => p.querySelector(s);
+    const qsa = (s, p=document) => [...p.querySelectorAll(s)];
+
+    const menuBtn = qs('#menuBtn');
+    const mobileNav = qs('#mobileNav');
+    menuBtn?.addEventListener('click', () => {
+      const open = mobileNav.hasAttribute('hidden') ? false : true;
+      if (open) {
+        mobileNav.setAttribute('hidden', '');
+        menuBtn.setAttribute('aria-expanded','false');
+      } else {
+        mobileNav.removeAttribute('hidden');
+        menuBtn.setAttribute('aria-expanded','true');
+      }
+    });
+
+   
+    qsa('#mobileNav a').forEach(a => a.addEventListener('click', () => {
+      mobileNav.setAttribute('hidden','');
+      menuBtn.setAttribute('aria-expanded','false');
+    }));
+
+    const themeToggle = qs('#themeToggle');
+    const root = document.documentElement;
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'dark') root.classList.add('dark');
+    themeToggle?.addEventListener('click', () => {
+      root.classList.toggle('dark');
+      localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
+      })
+    }, { threshold: .15 });
+    qsa('.reveal').forEach(el => io.observe(el));
+
+    const sections = ['#features', '#work', '#pricing', '#contact'].map(id => qs(id));
+    const navLinks = qsa('header nav a');
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const id = '#' + entry.target.id;
+        const link = [...navLinks].find(a => a.getAttribute('href') === id);
+        if (entry.isIntersecting && link) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          link.classList.add('active');
+        }
+      })
+    }, { threshold: .6 });
+    sections.forEach(s => s && spy.observe(s));
+
+    qs('#toTop')?.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+    qs('#contactForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = qs('#name').value.trim();
+      const email = qs('#email').value.trim();
+      const message = qs('#message').value.trim();
+      const msgEl = qs('#formMsg');
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (name.length < 2) return msgEl.textContent = 'Name is too short.';
+      if (!emailOk) return msgEl.textContent = 'Enter a valid email.';
+      if (message.length < 10) return msgEl.textContent = 'Message is too short.';
+      msgEl.textContent = '✅ Thanks! We will get back to you shortly.';
+      e.target.reset();
+    });
+
+    qs('#subForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = qs('#subEmail').value.trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return alert('Please enter a valid email');
+      alert('Subscribed: ' + email);
+      e.target.reset();
+    });
+
+    
+    qs('#year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
