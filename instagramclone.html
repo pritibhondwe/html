@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Clone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fafafa;
+            color: #262626;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #dbdbdb;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 975px;
+            margin: 0 auto;
+            height: 60px;
+        }
+
+        .logo {
+            font-family: 'Instagram Sans', cursive;
+            font-size: 24px;
+            font-weight: bold;
+            color: #262626;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 268px;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 16px 8px 40px;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            background: #efefef;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #a8a8a8;
+            background: white;
+            text-align: left;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8e8e8e;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .nav-item:hover {
+            opacity: 0.7;
+        }
+
+        .nav-item i {
+            font-size: 24px;
+        }
+
+        .profile-pic {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            cursor: pointer;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 975px;
+            margin: 80px auto 0;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        /* Stories Section */
+        .stories-section {
+            grid-column: 1 / -1;
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .stories-container {
+            display: flex;
+            gap: 16px;
+            padding: 0 8px;
+        }
+
+        .story-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            min-width: 66px;
+        }
+
+        .story-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #dbdbdb;
+        }
+
+        .story-username {
+            font-size: 12px;
+            color: #262626;
+            text-align: center;
+            max-width: 66px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Posts Section */
+        .posts-section {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .post-card {
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            border-bottom: 1px solid #efefef;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .post-author-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .post-author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-author-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #262626;
+        }
+
+        .post-location {
+            font-size: 12px;
+            color: #8e8e8e;
+        }
+
+        .post-more {
+            cursor: pointer;
+            font-size: 20px;
+            color: #262626;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            position: relative;
+        }
+
+        .post-actions {
+            padding: 8px 16px;
+        }
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #262626;
+            transition: opacity 0.2s;
+        }
+
+        .action-btn:hover {
+            opacity: 0.7;
+        }
+
+        .action-btn.liked {
+            color: #ed4956;
+        }
+
+        .action-btn.bookmarked {
+            color: #262626;
+        }
+
+        .action-btn.bookmarked.active {
+            color: #262626;
+        }
+
+        .post-likes {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .post-caption {
+            margin-bottom: 8px;
+        }
+
+        .post-caption .username {
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .post-caption .text {
+            color: #262626;
+        }
+
+        .post-comments {
+            color: #8e8e8e;
+            font-size: 14px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .post-time {
+            color: #8e8e8e;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .post-input-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-top: 1px solid #efefef;
+        }
+
+        .post-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            resize: none;
+            max-height: 80px;
+        }
+
+        .post-submit {
+            background: none;
+            border: none;
+            color: #0095f6;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            opacity: 0.3;
+            transition: opacity 0.2s;
+        }
+
+        .post-submit.active {
+            opacity: 1;
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            grid-column: 2;
+            grid-row: 1 / span 2;
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            padding: 16px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .suggestions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .suggestions-title {
+            font-weight: 600;
+            color: #8e8e8e;
+            font-size: 14px;
+        }
+
+        .see-all {
+            color: #262626;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .suggestion-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .suggestion-info {
+            flex: 1;
+        }
+
+        .suggestion-username {
+            font-weight: 600;
+            font-size: 14px;
+            color: #262626;
+        }
+
+        .suggestion-followed-by {
+            font-size: 12px;
+            color: #8e8e8e;
+        }
+
+        .follow-btn {
+            background: none;
+            border: none;
+            color: #0095f6;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 0 16px;
+            }
+            
+            .right-sidebar {
+                display: none;
+            }
+            
+            .header-content {
+                padding: 0 16px;
+            }
+            
+            .search-container {
+                display: none;
+            }
+        }
+
+        /* Stories Animation */
+        @keyframes storyPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .story-item:hover .story-avatar {
+            animation: storyPulse 0.3s ease-in-out;
+        }
+
+        /* Like Animation */
+        @keyframes likeAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .action-btn.liked {
+            animation: likeAnimation 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Instagram</div>
+            
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Search">
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <i>🏠</i>
+                </div>
+                <div class="nav-item">
+                    <i>📱</i>
+                </div>
+                <div class="nav-item">
+                    <i>➕</i>
+                </div>
+                <div class="nav-item">
+                    <i>🎬</i>
+                </div>
+                <div class="nav-item">
+                    <i>💬</i>
+                </div>
+                <div class="nav-item">
+                    <i>❤️</i>
+                </div>
+                <div class="profile-pic"></div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Stories Section -->
+        <section class="stories-section">
+            <div class="stories-container" id="stories-container">
+                <!-- Stories will be generated here -->
+            </div>
+        </section>
+
+        <!-- Posts Section -->
+        <section class="posts-section" id="posts-section">
+            <!-- Posts will be generated here -->
+        </section>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div class="suggestions-header">
+                <div class="suggestions-title">Suggestions for you</div>
+                <div class="see-all">See All</div>
+            </div>
+            
+            <div id="suggestions-container">
+                <!-- Suggestions will be generated here -->
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Sample data
+        const stories = [
+            { id: 1, username: "john_doe", avatar: "JD" },
+            { id: 2, username: "jane_smith", avatar: "JS" },
+            { id: 3, username: "mike_wilson", avatar: "MW" },
+            { id: 4, username: "sarah_jones", avatar: "SJ" },
+            { id: 5, username: "alex_brown", avatar: "AB" },
+            { id: 6, username: "emma_davis", avatar: "ED" },
+            { id: 7, username: "chris_lee", avatar: "CL" },
+            { id: 8, username: "lisa_wang", avatar: "LW" }
+        ];
+
+        const posts = [
+            {
+                id: 1,
+                author: {
+                    name: "john_doe",
+                    avatar: "JD",
+                    location: "San Francisco, CA"
+                },
+                image: "Beautiful sunset view from Golden Gate Bridge",
+                caption: "Amazing sunset view from Golden Gate Bridge! 🌅 #sanfrancisco #sunset #goldengate",
+                likes: 1247,
+                comments: 89,
+                time: "2 hours ago",
+                isLiked: false,
+                isBookmarked: false
+            },
+            {
+                id: 2,
+                author: {
+                    name: "jane_smith",
+                    avatar: "JS",
+                    location: "New York, NY"
+                },
+                image: "Delicious brunch at trendy cafe",
+                caption: "Perfect Sunday brunch! 🥑 #brunch #foodie #nyc",
+                likes: 892,
+                comments: 45,
+                time: "5 hours ago",
+                isLiked: true,
+                isBookmarked: false
+            },
+            {
+                id: 3,
+                author: {
+                    name: "mike_wilson",
+                    avatar: "MW",
+                    location: "Los Angeles, CA"
+                },
+                image: "Hiking trail in Griffith Park",
+                caption: "Great hike today! The views were incredible 🏔️ #hiking #griffithpark #la",
+                likes: 567,
+                comments: 23,
+                time: "1 day ago",
+                isLiked: false,
+                isBookmarked: true
+            }
+        ];
+
+        const suggestions = [
+            { username: "tech_guru", avatar: "TG", followedBy: "john_doe" },
+            { username: "travel_lover", avatar: "TL", followedBy: "jane_smith" },
+            { username: "food_blogger", avatar: "FB", followedBy: "mike_wilson" },
+            { username: "fitness_coach", avatar: "FC", followedBy: "sarah_jones" },
+            { username: "art_creator", avatar: "AC", followedBy: "alex_brown" }
+        ];
+
+        // Render stories
+        function renderStories() {
+            const storiesContainer = document.getElementById('stories-container');
+            storiesContainer.innerHTML = '';
+
+            stories.forEach(story => {
+                const storyElement = createStoryElement(story);
+                storiesContainer.appendChild(storyElement);
+            });
+        }
+
+        // Create story element
+        function createStoryElement(story) {
+            const storyDiv = document.createElement('div');
+            storyDiv.className = 'story-item';
+            storyDiv.innerHTML = `
+                <div class="story-avatar">${story.avatar}</div>
+                <div class="story-username">${story.username}</div>
+            `;
+            
+            storyDiv.addEventListener('click', () => {
+                alert(`Viewing ${story.username}'s story!`);
+            });
+            
+            return storyDiv;
+        }
+
+        // Render posts
+        function renderPosts() {
+            const postsSection = document.getElementById('posts-section');
+            postsSection.innerHTML = '';
+
+            posts.forEach(post => {
+                const postElement = createPostElement(post);
+                postsSection.appendChild(postElement);
+            });
+        }
+
+        // Create post element
+        function createPostElement(post) {
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post-card';
+            postDiv.innerHTML = `
+                <div class="post-header">
+                    <div class="post-author">
+                        <div class="post-author-avatar">${post.author.avatar}</div>
+                        <div class="post-author-info">
+                            <div class="post-author-name">${post.author.name}</div>
+                            <div class="post-location">${post.author.location}</div>
+                        </div>
+                    </div>
+                    <div class="post-more">⋯</div>
+                </div>
+                
+                <div class="post-image">${post.image}</div>
+                
+                <div class="post-actions">
+                    <div class="action-buttons">
+                        <button class="action-btn ${post.isLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                            ${post.isLiked ? '❤️' : '🤍'}
+                        </button>
+                        <button class="action-btn" onclick="addComment(${post.id})">💬</button>
+                        <button class="action-btn" onclick="sharePost(${post.id})">📤</button>
+                        <button class="action-btn ${post.isBookmarked ? 'bookmarked active' : ''}" onclick="toggleBookmark(${post.id})">
+                            ${post.isBookmarked ? '🔖' : '📖'}
+                        </button>
+                    </div>
+                    
+                    <div class="post-likes">${post.likes} likes</div>
+                    
+                    <div class="post-caption">
+                        <span class="username">${post.author.name}</span>
+                        <span class="text">${post.caption}</span>
+                    </div>
+                    
+                    <div class="post-comments" onclick="showComments(${post.id})">
+                        View all ${post.comments} comments
+                    </div>
+                    
+                    <div class="post-time">${post.time}</div>
+                </div>
+                
+                <div class="post-input-section">
+                    <textarea class="post-input" placeholder="Add a comment..." rows="1"></textarea>
+                    <button class="post-submit" onclick="submitComment(${post.id})">Post</button>
+                </div>
+            `;
+            
+            // Handle comment input
+            const textarea = postDiv.querySelector('.post-input');
+            const submitBtn = postDiv.querySelector('.post-submit');
+            
+            textarea.addEventListener('input', function() {
+                submitBtn.classList.toggle('active', this.value.trim().length > 0);
+            });
+            
+            return postDiv;
+        }
+
+        // Render suggestions
+        function renderSuggestions() {
+            const suggestionsContainer = document.getElementById('suggestions-container');
+            suggestionsContainer.innerHTML = '';
+
+            suggestions.forEach(suggestion => {
+                const suggestionElement = createSuggestionElement(suggestion);
+                suggestionsContainer.appendChild(suggestionElement);
+            });
+        }
+
+        // Create suggestion element
+        function createSuggestionElement(suggestion) {
+            const suggestionDiv = document.createElement('div');
+            suggestionDiv.className = 'suggestion-item';
+            suggestionDiv.innerHTML = `
+                <div class="suggestion-avatar">${suggestion.avatar}</div>
+                <div class="suggestion-info">
+                    <div class="suggestion-username">${suggestion.username}</div>
+                    <div class="suggestion-followed-by">Followed by ${suggestion.followedBy}</div>
+                </div>
+                <button class="follow-btn" onclick="followUser('${suggestion.username}')">Follow</button>
+            `;
+            return suggestionDiv;
+        }
+
+        // Toggle like
+        function toggleLike(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.isLiked = !post.isLiked;
+                post.likes += post.isLiked ? 1 : -1;
+                renderPosts();
+            }
+        }
+
+        // Toggle bookmark
+        function toggleBookmark(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.isBookmarked = !post.isBookmarked;
+                renderPosts();
+            }
+        }
+
+        // Add comment
+        function addComment(postId) {
+            const comment = prompt('Add a comment:');
+            if (comment) {
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    post.comments += 1;
+                    renderPosts();
+                    alert('Comment added!');
+                }
+            }
+        }
+
+        // Share post
+        function sharePost(postId) {
+            alert('Post shared!');
+        }
+
+        // Show comments
+        function showComments(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                alert(`Showing ${post.comments} comments for this post!`);
+            }
+        }
+
+        // Submit comment
+        function submitComment(postId) {
+            const postElement = document.querySelector(`[data-post-id="${postId}"]`);
+            const textarea = postElement.querySelector('.post-input');
+            const comment = textarea.value.trim();
+            
+            if (comment) {
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    post.comments += 1;
+                    textarea.value = '';
+                    renderPosts();
+                    alert('Comment posted!');
+                }
+            }
+        }
+
+        // Follow user
+        function followUser(username) {
+            alert(`You are now following ${username}!`);
+        }
+
+        // Initialize the app
+        function init() {
+            renderStories();
+            renderPosts();
+            renderSuggestions();
+            
+            // Handle search
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('focus', function() {
+                this.placeholder = 'Search';
+            });
+            
+            searchInput.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.placeholder = 'Search';
+                }
+            });
+        }
+
+        // Start the app
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
