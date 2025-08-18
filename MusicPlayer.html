@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Player Website</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .player-container {
+      display: flex;
+      width: 900px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+    .playlist {
+      width: 250px;
+      background: #111;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .playlist h2 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .playlist ul {
+      list-style: none;
+      padding: 0;
+    }
+    .playlist li {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 1px solid #333;
+    }
+    .playlist li:hover {
+      background: #222;
+    }
+    .active {
+      background: #007bff !important;
+    }
+    .controls {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+    canvas {
+      width: 100%;
+      height: 200px;
+      background: black;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .buttons {
+      margin-top: 15px;
+    }
+    button {
+      background: #007bff;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .progress-container {
+      width: 80%;
+      height: 8px;
+      background: #444;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .progress {
+      height: 100%;
+      background: #00ffcc;
+      width: 0%;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="player-container">
+    <div class="playlist">
+      <h2>Playlist</h2>
+      <ul id="playlist">
+        <li data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Song 1</li>
+        <li data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Song 2</li>
+        <li data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Song 3</li>
+      </ul>
+    </div>
+    <div class="controls">
+      <canvas id="visualizer"></canvas>
+      <h3 id="song-title">Select a Song</h3>
+      <div class="progress-container" id="progress-container">
+        <div class="progress" id="progress"></div>
+      </div>
+      <div class="buttons">
+        <button id="prev">⏮</button>
+        <button id="play">▶</button>
+        <button id="next">⏭</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const audio = new Audio();
+    const playlistEl = document.getElementById("playlist");
+    const items = playlistEl.getElementsByTagName("li");
+    const songTitle = document.getElementById("song-title");
+    const playBtn = document.getElementById("play");
+    const prevBtn = document.getElementById("prev");
+    const nextBtn = document.getElementById("next");
+    const progressContainer = document.getElementById("progress-container");
+    const progress = document.getElementById("progress");
+
+    let currentSongIndex = 0;
+    let isPlaying = false;
+
+  
+    function loadSong(index) {
+      for (let item of items) item.classList.remove("active");
+      items[index].classList.add("active");
+      audio.src = items[index].getAttribute("data-src");
+      songTitle.textContent = items[index].textContent;
+    }
+
+   
+    function playSong() {
+      isPlaying = true;
+      audio.play();
+      playBtn.textContent = "⏸";
+    }
+
+
+    function pauseSong() {
+      isPlaying = false;
+      audio.pause();
+      playBtn.textContent = "▶";
+    }
+
+    playBtn.addEventListener("click", () => {
+      isPlaying ? pauseSong() : playSong();
+    });
+
+    nextBtn.addEventListener("click", () => {
+      currentSongIndex = (currentSongIndex + 1) % items.length;
+      loadSong(currentSongIndex);
+      playSong();
+    });
+
+    prevBtn.addEventListener("click", () => {
+      currentSongIndex = (currentSongIndex - 1 + items.length) % items.length;
+      loadSong(currentSongIndex);
+      playSong();
+    });
+
+    playlistEl.addEventListener("click", e => {
+      if (e.target.tagName === "LI") {
+        currentSongIndex = [...items].indexOf(e.target);
+        loadSong(currentSongIndex);
+        playSong();
+      }
+    });
+
+   
+    audio.addEventListener("timeupdate", () => {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      progress.style.width = percent + "%";
+    });
+
+    progressContainer.addEventListener("click", e => {
+      const width = progressContainer.clientWidth;
+      const clickX = e.offsetX;
+      const duration = audio.duration;
+      audio.currentTime = (clickX / width) * duration;
+    });
+
+    
+    const canvas = document.getElementById("visualizer");
+    const ctx = canvas.getContext("2d");
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const analyser = audioCtx.createAnalyser();
+    const source = audioCtx.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    analyser.fftSize = 256;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    function draw() {
+      requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArray);
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      let barWidth = (canvas.width / bufferLength) * 2.5;
+      let x = 0;
+      for (let i = 0; i < bufferLength; i++) {
+        let barHeight = dataArray[i] / 2;
+        ctx.fillStyle = "rgb(" + (barHeight + 100) + ",50,200)";
+        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+        x += barWidth + 1;
+      }
+    }
+    draw();
+
+
+    document.body.addEventListener("click", () => {
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+    });
+
+    loadSong(currentSongIndex);
+  </script>
+</body>
+</html>
