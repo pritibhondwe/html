@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WeatherNow – No API Key Needed</title>
+  <style>
+    :root { --brand:#5dd0d6; --accent:#6d83f2; --card:#ffffff; --muted:#65738b; }
+    *{box-sizing:border-box}
+    body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#74ebd5 0%,#9face6 100%);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+    .wrap{width:min(420px,92vw);background:var(--card);padding:20px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+    h1{margin:6px 0 14px;font-size:22px;text-align:center}
+    .row{display:flex;gap:8px}
+    input[type="text"]{flex:1;padding:10px 12px;border:2px solid var(--brand);border-radius:8px;outline:none}
+    button{border:0;border-radius:8px;padding:10px 12px;background:var(--brand);color:#fff;cursor:pointer}
+    button.secondary{background:var(--accent)}
+    .hint{margin-top:8px;color:var(--muted);font-size:12px;text-align:center}
+    .status{margin-top:10px;color:var(--muted);font-size:13px;min-height:18px}
+    .card{margin-top:14px;background:#f0f8ff;border-radius:10px;padding:14px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    .big{font-size:42px;font-weight:700}
+    .loc{color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>WeatherNow ☀️ (No API Key)</h1>
+    <div class="row">
+      <input id="city" type="text" placeholder="Enter city e.g. Mumbai"/>
+      <button id="search">Search</button>
+    </div>
+    <div class="hint">Tip: Try <em>Mumbai</em>, <em>Pune</em>, <em>London</em>, <em>Tokyo</em></div>
+    <div class="row" style="margin-top:8px">
+      <button id="myloc" class="secondary" title="Uses browser location">Use My Location 📍</button>
+    </div>
+    <div id="status" class="status" aria-live="polite"></div>
+    <div id="out" class="card" style="display:none"></div>
+  </div>
+
+  <script>
+    // Uses Open‑Meteo's free Geocoding + Forecast APIs (no key required)
+    const out = document.getElementById('out');
+    const statusEl = document.getElementById('status');
+
+    const WMO = new Map([
+      [[0], 'Clear sky ☀️'],
+      [[1,2], 'Partly cloudy ⛅'],
+      [[3], 'Overcast ☁️'],
+      [[45,48], 'Fog 🌫️'],
+      [[51,53,55], 'Drizzle 🌦️'],
+      [[56,57], 'Freezing drizzle 🌦️❄️'],
+      [[61,63,65], 'Rain 🌧️'],
+      [[66,67], 'Freezing rain 🌧️❄️'],
+      [[71,73,75,77], 'Snow ❄️'],
+      [[80,81,82], 'Rain showers 🌦️'],
+      [[85,86], 'Snow showers ❄️'],
+      [[95], 'Thunderstorm ⛈️'],
+      [[96,99], 'Thunderstorm w/ hail ⛈️']
+    ]);
+    function codeToText(code){
+      for (const [keys,label] of WMO) if(keys.includes(code)) return label;
+      return 'Weather code ' + code;
+    }
+
+    async function geocode(name){
+      const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=1&language=en&format=json`;
+      const res = await fetch(url);
+      if(!res.ok) throw new Error('Geocoding failed');
+      const data = await res.json();
+      if(!data.results || !data.results.length) throw new Error('No results for that city');
+      const r = data.results[0];
+      return { lat:r.latitude, lon:r.longitude, name:r.name, country:r.country_code, admin:r.admin1||'' };
+    }
+
+    async function fetchWeather(lat, lon){
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto`;
+      const res = await fetch(url);
+      if(!res.ok) throw new Error('Weather fetch failed');
+      return res.json();
+    }
+
+    function render(loc, wx){
+      const cur = wx.current;
+      out.style.display = 'block';
+      out.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div>
+            <div class="big">${Math.round(cur.temperature_2m)}°C</div>
+            <div>${codeToText(cur.weather_code)}</div>
+            <div class="loc">${loc.name}${loc.admin?`, ${loc.admin}`:''}, ${loc.country}</div>
+          </div>
+          <div style="text-align:right">
+            <div><strong>Feels like:</strong> ${Math.round(cur.apparent_temperature)}°C</div>
+            <div><strong>Humidity:</strong> ${cur.relative_humidity_2m}%</div>
+            <div><strong>Wind:</strong> ${cur.wind_speed_10m} km/h</div>
+            <div class="loc">Updated: ${cur.time.replace('T',' ')}</div>
+          </div>
+        </div>`;
+    }
+
+    async function handleCity(){
+      const q = document.getElementById('city').value.trim();
+      if(!q){ statusEl.textContent = 'Please type a city name.'; return; }
+      try{
+        statusEl.textContent = 'Searching city…';
+        const loc = await geocode(q);
+        statusEl.textContent = 'Fetching weather…';
+        const wx = await fetchWeather(loc.lat, loc.lon);
+        statusEl.textContent = '';
+        render(loc, wx);
+      }catch(err){
+        statusEl.textContent = err.message || 'Something went wrong.';
+        out.style.display = 'none';
+      }
+    }
+
+    async function handleGeo(){
+      if(!('geolocation' in navigator)){
+        statusEl.textContent = 'Geolocation not supported by your browser.'; return;
+      }
+      statusEl.textContent = 'Getting your location…';
+      navigator.geolocation.getCurrentPosition(async (pos)=>{
+        try{
+          const {latitude:lat, longitude:lon} = pos.coords;
+          statusEl.textContent = 'Fetching weather…';
+          const wx = await fetchWeather(lat, lon);
+          // Reverse geocode for a friendly name (optional quick call with small radius)
+          const rev = await fetch(`https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=en&format=json`);
+          let loc = {name:'Your location', country:'', admin:''};
+          if(rev.ok){
+            const j = await rev.json();
+            if(j.results && j.results[0]){
+              const r = j.results[0];
+              loc = {name:r.name, country:r.country_code, admin:r.admin1||''};
+            }
+          }
+          statusEl.textContent = '';
+          render(loc, wx);
+        }catch(e){ statusEl.textContent = e.message || 'Could not fetch weather.'; }
+      }, (err)=>{
+        statusEl.textContent = err.message.includes('secure') ? 'Allow location on HTTPS to use this feature.' : (err.message || 'Location denied.');
+      }, {enableHighAccuracy:false, timeout:8000, maximumAge:300000});
+    }
+
+    document.getElementById('search').addEventListener('click', handleCity);
+    document.getElementById('city').addEventListener('keydown', e=>{ if(e.key==='Enter') handleCity(); });
+    document.getElementById('myloc').addEventListener('click', handleGeo);
+  </script>
+</body>
+</html>
