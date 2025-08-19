@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PixelSnap – Image Gallery</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #d4fc79, #96e6a1);
+      color: #111;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+    }
+    h1 { margin: 0; }
+    .filters {
+      margin-top: 12px;
+    }
+    .filters button {
+      padding: 8px 14px;
+      border: none;
+      margin: 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .filters button.active { background: #34d399; color: white; }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      padding: 20px;
+    }
+    .card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      cursor: pointer;
+    }
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .card:hover img { transform: scale(1.1); }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 12px;
+    }
+    .lightbox:target { display: flex; }
+    .close {
+      position: absolute;
+      top: 20px; right: 30px;
+      font-size: 30px;
+      color: #fff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PixelSnap 📸</h1>
+    <div class="filters">
+      <button class="active" data-filter="all">All</button>
+      <button data-filter="nature">Nature</button>
+      <button data-filter="city">City</button>
+      <button data-filter="animals">Animals</button>
+    </div>
+  </header>
+
+  <main class="gallery" id="gallery">
+    <!-- Images injected by JS -->
+  </main>
+
+  <div class="lightbox" id="lightbox">
+    <a href="#" class="close">✖</a>
+    <img id="lightbox-img" src="" alt="Preview">
+  </div>
+
+  <script>
+    const IMAGES = [
+      {src:"https://picsum.photos/id/1015/400/300", tag:"nature"},
+      {src:"https://picsum.photos/id/1025/400/300", tag:"animals"},
+      {src:"https://picsum.photos/id/1031/400/300", tag:"city"},
+      {src:"https://picsum.photos/id/1041/400/300", tag:"nature"},
+      {src:"https://picsum.photos/id/1062/400/300", tag:"animals"},
+      {src:"https://picsum.photos/id/1050/400/300", tag:"city"},
+      {src:"https://picsum.photos/id/1074/400/300", tag:"nature"},
+      {src:"https://picsum.photos/id/1084/400/300", tag:"animals"}
+    ];
+
+    const gallery = document.getElementById("gallery");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+
+    function renderImages(filter) {
+      gallery.innerHTML = "";
+      IMAGES.filter(img => filter==="all" || img.tag===filter)
+        .forEach(img => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `<img src="${img.src}" alt="${img.tag}">`;
+          card.addEventListener("click", ()=>{
+            lightbox.style.display = "flex";
+            lightboxImg.src = img.src;
+          });
+          gallery.appendChild(card);
+        });
+    }
+
+    document.querySelectorAll(".filters button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderImages(btn.dataset.filter);
+      });
+    });
+
+    document.querySelector(".close").addEventListener("click", ()=>{
+      lightbox.style.display = "none";
+    });
+
+    renderImages("all");
+  </script>
+</body>
+</html>
