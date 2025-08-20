@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Shopping Cart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      display: flex;
+      justify-content: space-between;
+    }
+    .products, .cart {
+      width: 45%;
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .product, .cart-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .add-btn {
+      background: #28a745;
+      color: white;
+    }
+    .remove-btn {
+      background: #dc3545;
+      color: white;
+    }
+    .total {
+      text-align: right;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛒 Mini Shopping Cart</h1>
+  <div class="container">
+    <!-- Product List -->
+    <div class="products">
+      <h2>Products</h2>
+      <div class="product">
+        <span>Apple</span>
+        <span>Rs.2</span>
+        <button class="add-btn" onclick="addToCart('Apple', 2)">Add</button>
+      </div>
+      <div class="product">
+        <span>Banana</span>
+        <span>Rs.1</span>
+        <button class="add-btn" onclick="addToCart('Banana', 1)">Add</button>
+      </div>
+      <div class="product">
+        <span>Orange</span>
+        <span>Rs.3</span>
+        <button class="add-btn" onclick="addToCart('Orange', 3)">Add</button>
+      </div>
+      <div class="product">
+        <span>Mango</span>
+        <span>Rs.4</span>
+        <button class="add-btn" onclick="addToCart('Mango', 4)">Add</button>
+      </div>
+    </div>
+
+    <!-- Cart Section -->
+    <div class="cart">
+      <h2>Cart</h2>
+      <div id="cart-items"></div>
+      <div class="total">Total: Rs<span id="total">0</span></div>
+    </div>
+  </div>
+
+  <script>
+    let cart = [];
+    
+    function addToCart(product, price) {
+      // Check if product already in cart
+      const existing = cart.find(item => item.name === product);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ name: product, price: price, qty: 1 });
+      }
+      renderCart();
+    }
+
+    function removeFromCart(product) {
+      cart = cart.filter(item => item.name !== product);
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartItems = document.getElementById("cart-items");
+      cartItems.innerHTML = "";
+      let total = 0;
+
+      cart.forEach(item => {
+        total += item.price * item.qty;
+        cartItems.innerHTML += `
+          <div class="cart-item">
+            <span>${item.name} (x${item.qty})</span>
+            <span>$${item.price * item.qty}</span>
+            <button class="remove-btn" onclick="removeFromCart('${item.name}')">Remove</button>
+          </div>
+        `;
+      });
+
+      document.getElementById("total").innerText = total;
+    }
+  </script>
+
+</body>
+</html>
