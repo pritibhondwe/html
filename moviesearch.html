@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎬 Movie Explorer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0d0d0d;
+      color: #fff;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(90deg, #e50914, #b20710);
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .search-box {
+      margin: 20px auto;
+      text-align: center;
+    }
+
+    .search-box input {
+      padding: 12px;
+      width: 60%;
+      border: none;
+      border-radius: 30px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    .search-box button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 30px;
+      background: #e50914;
+      color: #fff;
+      margin-left: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .search-box button:hover {
+      background: #f40612;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+    }
+
+    .movies, .favorites {
+      width: 48%;
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+      border-bottom: 2px solid #e50914;
+      padding-bottom: 5px;
+    }
+
+    .movie, .fav-movie {
+      background: #1c1c1c;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .movie:hover, .fav-movie:hover {
+      transform: scale(1.03);
+    }
+
+    .movie img, .fav-movie img {
+      width: 80px;
+      height: 120px;
+      border-radius: 8px;
+      margin-right: 15px;
+      object-fit: cover;
+    }
+
+    .movie-info h3, .fav-info h3 {
+      margin-bottom: 5px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      margin-top: 5px;
+      font-size: 0.9rem;
+    }
+
+    .fav-btn {
+      background: #1e90ff;
+      color: white;
+    }
+
+    .remove-btn {
+      background: #e50914;
+      color: white;
+    }
+
+    /* Movie Details Popup */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 800px;
+      display: flex;
+      gap: 20px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .modal img {
+      width: 200px;
+      border-radius: 10px;
+    }
+
+    .modal-details {
+      max-width: 500px;
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 30px;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🎬 Movie Explorer</h1>
+  </header>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search for a movie...">
+    <button onclick="searchMovies()">Search</button>
+  </div>
+
+  <div class="container">
+    <!-- Search Results -->
+    <div class="movies">
+      <h2>Search Results</h2>
+      <div id="movieList"></div>
+    </div>
+
+    <!-- Favorites -->
+    <div class="favorites">
+      <h2>⭐ Favorites</h2>
+      <div id="favList"></div>
+    </div>
+  </div>
+
+  <!-- Movie Details Modal -->
+  <div class="modal" id="movieModal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+
+  <script>
+    const API_KEY = "YOUR_OMDB_API_KEY"; // Replace with your OMDb API key
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+    async function searchMovies() {
+      const query = document.getElementById("searchInput").value;
+      if (!query) return alert("Please enter a movie name!");
+
+      const res = await fetch(`https://www.omdbapi.com/?s=${query}&apikey=${API_KEY}`);
+      const data = await res.json();
+
+      const movieList = document.getElementById("movieList");
+      movieList.innerHTML = "";
+
+      if (data.Search) {
+        data.Search.forEach(movie => {
+          const movieDiv = document.createElement("div");
+          movieDiv.classList.add("movie");
+          movieDiv.innerHTML = `
+            <img src="${movie.Poster !== "N/A" ? movie.Poster : "https://via.placeholder.com/80"}" alt="${movie.Title}">
+            <div class="movie-info">
+              <h3>${movie.Title} (${movie.Year})</h3>
+              <button class="btn fav-btn" onclick="addToFavorites('${movie.imdbID}')">Add to Favorites</button>
+            </div>
+          `;
+          movieDiv.addEventListener("click", () => showMovieDetails(movie.imdbID));
+          movieList.appendChild(movieDiv);
+        });
+      } else {
+        movieList.innerHTML = "<p>No movies found!</p>";
+      }
+    }
+
+    async function addToFavorites(id) {
+      if (favorites.find(f => f.imdbID === id)) {
+        alert("Already in favorites!");
+        return;
+      }
+
+      const res = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=${API_KEY}`);
+      const movie = await res.json();
+
+      favorites.push(movie);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      renderFavorites();
+    }
+
+    function removeFromFavorites(id) {
+      favorites = favorites.filter(movie => movie.imdbID !== id);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      renderFavorites();
+    }
+
+    function renderFavorites() {
+      const favList = document.getElementById("favList");
+      favList.innerHTML = "";
+
+      favorites.forEach(movie => {
+        const favDiv = document.createElement("div");
+        favDiv.classList.add("fav-movie");
+        favDiv.innerHTML = `
+          <img src="${movie.Poster !== "N/A" ? movie.Poster : "https://via.placeholder.com/80"}" alt="${movie.Title}">
+          <div class="fav-info">
+            <h3>${movie.Title} (${movie.Year})</h3>
+            <p>⭐ ${movie.imdbRating || "N/A"}</p>
+            <button class="btn remove-btn" onclick="removeFromFavorites('${movie.imdbID}')">Remove</button>
+          </div>
+        `;
+        favList.appendChild(favDiv);
+      });
+    }
+
+    async function showMovieDetails(id) {
+      const res = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=${API_KEY}&plot=full`);
+      const movie = await res.json();
+
+      const modalContent = document.getElementById("modalContent");
+      modalContent.innerHTML = `
+        <img src="${movie.Poster !== "N/A" ? movie.Poster : "https://via.placeholder.com/200"}" alt="${movie.Title}">
+        <div class="modal-details">
+          <h2>${movie.Title} (${movie.Year})</h2>
+          <p><strong>Genre:</strong> ${movie.Genre}</p>
+          <p><strong>Actors:</strong> ${movie.Actors}</p>
+          <p><strong>Director:</strong> ${movie.Director}</p>
+          <p><strong>⭐ IMDb:</strong> ${movie.imdbRating}</p>
+          <p><strong>Plot:</strong> ${movie.Plot}</p>
+        </div>
+      `;
+
+      document.getElementById("movieModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("movieModal").style.display = "none";
+    }
+
+    // Load favorites on page load
+    renderFavorites();
+  </script>
+
+</body>
+</html>
