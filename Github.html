@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Clone — Where the world builds software</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --github-bg: #0d1117;
+            --github-surface: #161b22;
+            --github-border: #30363d;
+            --github-text: #c9d1d9;
+            --github-text-secondary: #8b949e;
+            --github-accent: #58a6ff;
+            --github-success: #238636;
+            --github-danger: #da3633;
+            --github-warning: #d29922;
+            --github-purple: #bc8cff;
+            --github-green: #7ee787;
+            --github-blue: #79c0ff;
+            --github-orange: #ffa657;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--github-bg);
+            color: var(--github-text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--github-surface);
+            border-bottom: 1px solid var(--github-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            height: 60px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .github-logo {
+            color: var(--github-text);
+            font-size: 2rem;
+            text-decoration: none;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.5rem 2rem 0.5rem 0.75rem;
+            background: var(--github-bg);
+            border: 1px solid var(--github-border);
+            border-radius: 6px;
+            color: var(--github-text);
+            font-size: 0.875rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--github-accent);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--github-text-secondary);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: var(--github-text);
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .nav-link:hover {
+            background: var(--github-bg);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--github-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--github-accent), var(--github-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--github-text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--github-success);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2ea043;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--github-surface);
+            color: var(--github-text);
+            border: 1px solid var(--github-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--github-bg);
+            border-color: var(--github-accent);
+        }
+
+        /* Repository Grid */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--github-text);
+        }
+
+        .repo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .repo-card {
+            background: var(--github-surface);
+            border: 1px solid var(--github-border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            transition: border-color 0.2s;
+        }
+
+        .repo-card:hover {
+            border-color: var(--github-accent);
+        }
+
+        .repo-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .repo-icon {
+            color: var(--github-accent);
+            font-size: 1.25rem;
+            margin-top: 0.125rem;
+        }
+
+        .repo-info {
+            flex: 1;
+        }
+
+        .repo-name {
+            color: var(--github-accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.125rem;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .repo-name:hover {
+            text-decoration: underline;
+        }
+
+        .repo-description {
+            color: var(--github-text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .repo-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.75rem;
+            color: var(--github-text-secondary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .meta-icon {
+            font-size: 0.875rem;
+        }
+
+        .language-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.25rem;
+        }
+
+        .language-javascript { background: #f1e05a; }
+        .language-python { background: #3572a5; }
+        .language-typescript { background: #2b7489; }
+        .language-html { background: #e34c26; }
+        .language-css { background: #563d7c; }
+        .language-java { background: #b07219; }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--github-surface);
+            border: 1px solid var(--github-border);
+            border-radius: 6px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--github-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--github-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Trending Repos */
+        .trending-section {
+            margin-bottom: 3rem;
+        }
+
+        .trending-list {
+            list-style: none;
+        }
+
+        .trending-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--github-border);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            transition: border-color 0.2s;
+        }
+
+        .trending-item:hover {
+            border-color: var(--github-accent);
+        }
+
+        .trending-rank {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--github-text-secondary);
+            min-width: 2rem;
+        }
+
+        .trending-icon {
+            color: var(--github-accent);
+            font-size: 1.25rem;
+        }
+
+        .trending-info {
+            flex: 1;
+        }
+
+        .trending-name {
+            color: var(--github-accent);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .trending-name:hover {
+            text-decoration: underline;
+        }
+
+        .trending-description {
+            color: var(--github-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .trending-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--github-text-secondary);
+        }
+
+        /* User Profile */
+        .profile-section {
+            background: var(--github-surface);
+            border: 1px solid var(--github-border);
+            border-radius: 6px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--github-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .profile-info h2 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-username {
+            color: var(--github-text-secondary);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-bio {
+            color: var(--github-text);
+            margin-bottom: 1rem;
+            max-width: 500px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--github-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .profile-stat strong {
+            color: var(--github-text);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--github-surface);
+            border-top: 1px solid var(--github-border);
+            padding: 2rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            text-align: center;
+            color: var(--github-text-secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-link {
+            color: var(--github-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .footer-link:hover {
+            color: var(--github-accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-bar {
+                width: 200px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .repo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-stats {
+                justify-content: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Loading States */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--github-border);
+            border-top: 2px solid var(--github-accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-left">
+                <a href="#" class="github-logo">
+                    <i class="fab fa-github"></i>
+                </a>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search or jump to...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </div>
+            <div class="nav-right">
+                <a href="#" class="nav-link">Pull requests</a>
+                <a href="#" class="nav-link">Issues</a>
+                <a href="#" class="nav-link">Marketplace</a>
+                <a href="#" class="nav-link">Explore</a>
+                <a href="#" class="user-avatar">JD</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">Where the world builds software</h1>
+            <p class="hero-subtitle">Millions of developers and companies build, ship, and maintain their software on GitHub—the largest and most advanced development platform in the world.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">
+                    <i class="fas fa-download"></i>
+                    Download for Windows
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    <i class="fas fa-book"></i>
+                    Documentation
+                </a>
+            </div>
+        </section>
+
+        <!-- Repository Grid -->
+        <section>
+            <h2 class="section-title">Popular Repositories</h2>
+            <div class="repo-grid">
+                <!-- Repo 1 -->
+                <div class="repo-card fade-in">
+                    <div class="repo-header">
+                        <i class="fas fa-book repo-icon"></i>
+                        <div class="repo-info">
+                            <a href="#" class="repo-name">facebook/react</a>
+                            <p class="repo-description">The library for web and native user interfaces. Build user interfaces out of individual pieces called components written in JavaScript.</p>
+                        </div>
+                    </div>
+                    <div class="repo-meta">
+                        <span class="meta-item">
+                            <span class="language-color language-javascript"></span>
+                            JavaScript
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-star meta-icon"></i>
+                            201k
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-code-branch meta-icon"></i>
+                            40.2k
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-circle meta-icon"></i>
+                            Updated 2 days ago
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Repo 2 -->
+                <div class="repo-card fade-in">
+                    <div class="repo-header">
+                        <i class="fas fa-book repo-icon"></i>
+                        <div class="repo-info">
+                            <a href="#" class="repo-name">microsoft/vscode</a>
+                            <p class="repo-description">Visual Studio Code is a code editor redefined and optimized for building and debugging modern web and cloud applications.</p>
+                        </div>
+                    </div>
+                    <div class="repo-meta">
+                        <span class="meta-item">
+                            <span class="language-color language-typescript"></span>
+                            TypeScript
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-star meta-icon"></i>
+                            145k
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-code-branch meta-icon"></i>
+                            23.1k
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-circle meta-icon"></i>
+                            Updated 1 day ago
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Repo 3 -->
+                <div class="repo-card fade-in">
+                    <div class="repo-header">
+                        <i class="fas fa-book repo-icon"></i>
+                        <div class="repo-info">
+                            <a href="#" class="repo-name">tensorflow/tensorflow</a>
+                            <p class="repo-description">An Open Source Machine Learning Framework for Everyone. TensorFlow is an end-to-end open source platform for machine learning.</p>
+                        </div>
+                    </div>
+                    <div class="repo-meta">
+                        <span class="meta-item">
+                            <span class="language-color language-python"></span>
+                            Python
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-star meta-icon"></i>
+                            175k
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-code-branch meta-icon"></i>
+                            88.2k
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-circle meta-icon"></i>
+                            Updated 3 days ago
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Repo 4 -->
+                <div class="repo-card fade-in">
+                    <div class="repo-header">
+                        <i class="fas fa-book repo-icon"></i>
+                        <div class="repo-info">
+                            <a href="#" class="repo-name">vuejs/vue</a>
+                            <p class="repo-description">Vue.js is a progressive, incrementally-adoptable JavaScript framework for building UI on the web.</p>
+                        </div>
+                    </div>
+                    <div class="repo-meta">
+                        <span class="meta-item">
+                            <span class="language-color language-javascript"></span>
+                            JavaScript
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-star meta-icon"></i>
+                            203k
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-code-branch meta-icon"></i>
+                            32.8k
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-circle meta-icon"></i>
+                            Updated 5 days ago
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <h2 class="section-title">GitHub by the numbers</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">100M+</div>
+                    <div class="stat-label">Repositories</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">40M+</div>
+                    <div class="stat-label">Developers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">Countries</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">99%</div>
+                    <div class="stat-label">Fortune 500</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trending Repositories -->
+        <section class="trending-section">
+            <h2 class="section-title">Trending repositories</h2>
+            <ul class="trending-list">
+                <li class="trending-item">
+                    <div class="trending-rank">1</div>
+                    <i class="fas fa-fire trending-icon"></i>
+                    <div class="trending-info">
+                        <a href="#" class="trending-name">microsoft/TypeScript</a>
+                        <p class="trending-description">TypeScript is a superset of JavaScript that compiles to clean JavaScript output.</p>
+                    </div>
+                    <div class="trending-stats">
+                        <span><i class="fas fa-star"></i> 95.2k</span>
+                        <span><i class="fas fa-code-branch"></i> 12.3k</span>
+                    </div>
+                </li>
+                <li class="trending-item">
+                    <div class="trending-rank">2</div>
+                    <i class="fas fa-fire trending-icon"></i>
+                    <div class="trending-info">
+                        <a href="#" class="trending-name">vercel/next.js</a>
+                        <p class="trending-description">The React Framework for Production. Next.js gives you the best developer experience.</p>
+                    </div>
+                    <div class="trending-stats">
+                        <span><i class="fas fa-star"></i> 67.8k</span>
+                        <span><i class="fas fa-code-branch"></i> 13.9k</span>
+                    </div>
+                </li>
+                <li class="trending-item">
+                    <div class="trending-rank">3</div>
+                    <i class="fas fa-fire trending-icon"></i>
+                    <div class="trending-info">
+                        <a href="#" class="trending-name">tailwindlabs/tailwindcss</a>
+                        <p class="trending-description">A utility-first CSS framework for rapidly building custom user interfaces.</p>
+                    </div>
+                    <div class="trending-stats">
+                        <span><i class="fas fa-star"></i> 71.2k</span>
+                        <span><i class="fas fa-code-branch"></i> 3.7k</span>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- User Profile -->
+        <section class="profile-section">
+            <div class="profile-header">
+                <div class="profile-avatar">JD</div>
+                <div class="profile-info">
+                    <h2>John Developer</h2>
+                    <div class="profile-username">@johndeveloper</div>
+                    <p class="profile-bio">Full-stack developer passionate about open source, web technologies, and building amazing user experiences. Love working with React, Node.js, and Python.</p>
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <i class="fas fa-users"></i>
+                            <strong>1.2k</strong> followers
+                        </div>
+                        <div class="profile-stat">
+                            <i class="fas fa-user-friends"></i>
+                            <strong>890</strong> following
+                        </div>
+                        <div class="profile-stat">
+                            <i class="fas fa-star"></i>
+                            <strong>156</strong> stars
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#" class="footer-link">Terms</a>
+                <a href="#" class="footer-link">Privacy</a>
+                <a href="#" class="footer-link">Security</a>
+                <a href="#" class="footer-link">Status</a>
+                <a href="#" class="footer-link">Help</a>
+                <a href="#" class="footer-link">Contact GitHub</a>
+                <a href="#" class="footer-link">Pricing</a>
+                <a href="#" class="footer-link">API</a>
+                <a href="#" class="footer-link">Training</a>
+                <a href="#" class="footer-link">Blog</a>
+                <a href="#" class="footer-link">About</a>
+            </div>
+            <p>&copy; 2024 GitHub, Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('focus', function() {
+            this.style.boxShadow = '0 0 0 3px rgba(88, 166, 255, 0.1)';
+        });
+
+        searchInput.addEventListener('blur', function() {
+            this.style.boxShadow = 'none';
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all repo cards
+        document.querySelectorAll('.repo-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Simulate GitHub-like interactions
+        document.querySelectorAll('.repo-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Add subtle click effect
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+
+        // Search suggestions (demo)
+        searchInput.addEventListener('input', function() {
+            if (this.value.length > 2) {
+                // Simulate search suggestions
+                console.log('Searching for:', this.value);
+            }
+        });
+
+        // Repository star functionality (demo)
+        document.querySelectorAll('.repo-card .fa-star').forEach(star => {
+            star.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('text-warning');
+                if (this.classList.contains('text-warning')) {
+                    this.style.color = '#fbbf24';
+                } else {
+                    this.style.color = '';
+                }
+            });
+        });
+
+        // Profile interactions
+        document.querySelector('.profile-avatar').addEventListener('click', function() {
+            alert('Profile settings would open here!');
+        });
+
+        // Responsive navigation
+        const navLinks = document.querySelector('.nav-right');
+        if (window.innerWidth <= 768) {
+            navLinks.style.display = 'none';
+        }
+
+        // Add some GitHub-like loading states
+        window.addEventListener('load', function() {
+            // Simulate content loading
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    el.style.opacity = '1';
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>
